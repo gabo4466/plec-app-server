@@ -1,6 +1,8 @@
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Professor } from '../../domain/users/professor';
 import { ProfessorCreateService } from '../../domain/users/services/professor/professor-create.service';
-import { Injectable } from '@nestjs/common';
 import { ProfessorCheckService } from '../../domain/users/services/professor/professor-check.service';
+import { UserException } from '../../domain/users/exceptions/user.exception';
 
 @Injectable()
 export class ProfessorRegisterUseCase {
@@ -9,7 +11,21 @@ export class ProfessorRegisterUseCase {
         private readonly professorCheckService: ProfessorCheckService,
     ) {}
 
-    execute() {
-        this.professorCheckService.execute();
+    async execute(professor: Professor) {
+        try {
+            if (await this.professorCheckService.execute(professor)) {
+                // TODO: SHOULD SEND MESSAGE WITH DETAILS ABOUT ERROR
+                throw new UserException(45);
+            }
+
+            return professor;
+        } catch (error) {
+            if (error instanceof UserException) {
+                error.manageException();
+            } else {
+                console.log(error['message']);
+                throw new InternalServerErrorException();
+            }
+        }
     }
 }

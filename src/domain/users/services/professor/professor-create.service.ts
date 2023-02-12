@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ProfessorRepository } from '../../repositories/professor.repository';
+import { Professor } from '../../professor';
 
 @Injectable()
 export class ProfessorCreateService {
@@ -8,5 +9,7 @@ export class ProfessorCreateService {
         private readonly professorRepository: ProfessorRepository,
     ) {}
 
-    execute() {}
+    async execute(professor: Professor) {
+        await this.professorRepository.create(professor);
+    }
 }

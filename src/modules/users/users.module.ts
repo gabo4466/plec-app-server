@@ -4,8 +4,21 @@ import { MongooseProfessorRepository } from '../../infrastructure/users/reposito
 import { AuthUsersController } from '../../infrastructure/users/controllers/auth-users.controller';
 import { ProfessorRegisterUseCase } from '../../application/users/professor-register.use-case';
 import { ProfessorCheckService } from '../../domain/users/services/professor/professor-check.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+    MongooseProfessorDto,
+    ProfessorSchema,
+} from '../../infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 
 @Module({
+    imports: [
+        MongooseModule.forFeature([
+            {
+                name: MongooseProfessorDto.name,
+                schema: ProfessorSchema,
+            },
+        ]),
+    ],
     controllers: [AuthUsersController],
     providers: [
         // USE CASES
@@ -21,5 +34,6 @@ import { ProfessorCheckService } from '../../domain/users/services/professor/pro
             useClass: MongooseProfessorRepository,
         },
     ],
+    exports: [],
 })
 export class UsersModule {}
