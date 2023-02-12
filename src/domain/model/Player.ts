@@ -1,8 +1,6 @@
 import { Person } from './Person';
 
-export class Player implements Person {
-    email: String;
-
+export class Player extends Person {
     experience: number;
     nickname: string;
 }

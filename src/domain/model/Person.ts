@@ -1,3 +1,3 @@
-export interface Person {
+export class Person {
     email: String;
 }
