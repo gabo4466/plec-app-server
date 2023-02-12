@@ -12,6 +12,24 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         private readonly professorModel: Model<MongooseProfessorDto>,
     ) {}
 
+    setDataFromProfessor(professor: Professor) {
+        return {
+            email: professor.email,
+            bio: professor.bio,
+            linkedin: professor.linkedin,
+            password: professor.password,
+        };
+    }
+
+    converToProfessor(mongooseProfessor: MongooseProfessorDto) {
+        let professor = new Professor();
+        professor.email = mongooseProfessor.email;
+        professor.bio = mongooseProfessor.bio;
+        professor.linkedin = mongooseProfessor.linkedin;
+        professor.password = mongooseProfessor.password;
+        return professor;
+    }
+
     search(term: string): Promise<Professor> {
         throw new Error('Method not implemented.');
     }
@@ -31,11 +49,10 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                         email: term.toLowerCase().trim(),
                     });
                 }
-                // throw new Error();
                 if (!mongooseProfessor) {
                     reject();
                 } else {
-                    resolve(mongooseProfessor.converToProfessor());
+                    resolve(this.converToProfessor(mongooseProfessor));
                 }
             } catch (error) {
                 reject(error);
@@ -43,7 +60,16 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         });
     }
     create(professor: Professor): Promise<Professor> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.professorModel.create(
+                    this.setDataFromProfessor(professor),
+                );
+                resolve(professor);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     getAll(offset: number, limit: number): Promise<Professor[]> {
         throw new Error('Method not implemented.');

@@ -7,7 +7,8 @@ export class UserException extends Error {
     }
 
     public manageException() {
-        if (this._code === 45) {
+        if (this._code === 1) {
+            // TODO: SHOULD SEND MESSAGE WITH DETAILS ABOUT ERROR
             throw new BadRequestException('User already exists');
         }
     }

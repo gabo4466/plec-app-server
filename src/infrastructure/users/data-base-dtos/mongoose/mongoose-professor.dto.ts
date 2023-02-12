@@ -20,15 +20,6 @@ export class MongooseProfessorDto extends Document {
 
     @Prop()
     password: string;
-
-    converToProfessor() {
-        let professor = new Professor();
-        professor.email = this.email;
-        professor.bio = this.bio;
-        professor.linkedin = this.linkedin;
-        professor.password = this.password;
-        return professor;
-    }
 }
 
 export const ProfessorSchema =

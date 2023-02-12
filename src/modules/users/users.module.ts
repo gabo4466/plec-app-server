@@ -16,6 +16,7 @@ import {
             {
                 name: MongooseProfessorDto.name,
                 schema: ProfessorSchema,
+                collection: 'professor',
             },
         ]),
     ],

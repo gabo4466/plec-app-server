@@ -10,6 +10,15 @@ export class ProfessorCreateService {
     ) {}
 
     async execute(professor: Professor) {
-        await this.professorRepository.create(professor);
+        this.professorRepository
+            .create(professor)
+            .then((professor) => {
+                return professor;
+            })
+            .catch((error) => {
+                if (error) {
+                    throw error;
+                }
+            });
     }
 }

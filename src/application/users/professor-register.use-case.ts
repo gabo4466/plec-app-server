@@ -14,9 +14,10 @@ export class ProfessorRegisterUseCase {
     async execute(professor: Professor) {
         try {
             if (await this.professorCheckService.execute(professor)) {
-                // TODO: SHOULD SEND MESSAGE WITH DETAILS ABOUT ERROR
-                throw new UserException(45);
+                throw new UserException(1);
             }
+
+            await this.professorCreateService.execute(professor);
 
             return professor;
         } catch (error) {
