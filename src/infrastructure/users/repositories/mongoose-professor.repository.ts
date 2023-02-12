@@ -4,9 +4,7 @@ import { ProfessorRepository } from '../../../domain/users/repositories/professo
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 
 @Injectable()
-export class MongooseProfessorRepository
-    implements ProfessorRepository<MongooseProfessorDto>
-{
+export class MongooseProfessorRepository implements ProfessorRepository {
     create(dataBaseDto: MongooseProfessorDto): Promise<any> {
         throw new Error('Method not implemented.');
     }
