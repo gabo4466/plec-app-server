@@ -5,7 +5,7 @@ import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-profes
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
-    create(dataBaseDto: MongooseProfessorDto): Promise<any> {
+    create(obj: Professor): Promise<any> {
         throw new Error('Method not implemented.');
     }
     findByTerm(term: string): Promise<Professor> {
@@ -14,7 +14,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
     getAll(offset: number, limit: number): Promise<Professor[]> {
         throw new Error('Method not implemented.');
     }
-    update(dataBaseDto: MongooseProfessorDto): Promise<Professor> {
+    update(obj: Professor): Promise<Professor> {
         throw new Error('Method not implemented.');
     }
     delete(id: string): Promise<any> {
