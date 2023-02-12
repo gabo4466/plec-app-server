@@ -18,6 +18,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             bio: professor.bio,
             linkedin: professor.linkedin,
             password: professor.password,
+            name: professor.name,
         };
     }
 

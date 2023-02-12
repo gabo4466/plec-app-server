@@ -40,6 +40,7 @@ export class CreateProfessorDto {
         professor.bio = this.bio;
         professor.linkedin = this.linkedin;
         professor.password = this.password;
+        professor.name = this.name;
         return professor;
     }
 }

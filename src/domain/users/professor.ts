@@ -27,4 +27,13 @@ export class Professor extends Person {
     public set password(newPassword: string) {
         this._password = newPassword;
     }
+
+    public toObject() {
+        return {
+            email: this.email,
+            name: this.name,
+            bio: this.bio,
+            linkedin: this.linkedin,
+        };
+    }
 }

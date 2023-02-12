@@ -9,6 +9,7 @@ import {
     MongooseProfessorDto,
     ProfessorSchema,
 } from '../../infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
+import { CommonModule } from '../common/common.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import {
                 collection: 'professor',
             },
         ]),
+        CommonModule,
     ],
     controllers: [AuthUsersController],
     providers: [
