@@ -19,12 +19,14 @@ export class ProfessorRegisterUseCase {
     ) {}
 
     async execute(professor: Professor) {
-        professor.password = this.cryptService.encrypt(professor.password);
         try {
             if (await this.professorCheckService.execute(professor)) {
                 throw new UserException(1);
             }
-            let newProfessor = await this.professorCreateService.execute(
+
+            professor.password = this.cryptService.encrypt(professor.password);
+
+            const newProfessor = await this.professorCreateService.execute(
                 professor,
             );
             return newProfessor.toObject();
