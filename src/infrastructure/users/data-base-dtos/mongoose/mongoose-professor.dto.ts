@@ -20,6 +20,11 @@ export class MongooseProfessorDto extends Document {
 
     @Prop()
     password: string;
+
+    @Prop({
+        default: ['user'],
+    })
+    roles: string[];
 }
 
 export const ProfessorSchema =

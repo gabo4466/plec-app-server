@@ -25,8 +25,10 @@ export class ProfessorRegisterUseCase {
                 throw new UserException(1);
             }
 
-            await this.professorCreateService.execute(professor);
-            return professor.toObject();
+            let newProfessor = await this.professorCreateService.execute(
+                professor,
+            );
+            return newProfessor.toObject();
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();

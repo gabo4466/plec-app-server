@@ -10,15 +10,13 @@ export class ProfessorCreateService {
     ) {}
 
     async execute(professor: Professor) {
-        this.professorRepository
+        return this.professorRepository
             .create(professor)
-            .then((professor) => {
-                return professor;
+            .then((professorCreated) => {
+                return professorCreated;
             })
             .catch((error) => {
-                if (error) {
-                    throw error;
-                }
+                throw error;
             });
     }
 }

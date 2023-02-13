@@ -19,6 +19,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             linkedin: professor.linkedin,
             password: professor.password,
             name: professor.name,
+            roles: professor.roles,
         };
     }
 
@@ -28,6 +29,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         professor.bio = mongooseProfessor.bio;
         professor.linkedin = mongooseProfessor.linkedin;
         professor.password = mongooseProfessor.password;
+        professor.roles = mongooseProfessor.roles;
         return professor;
     }
 
@@ -63,10 +65,11 @@ export class MongooseProfessorRepository implements ProfessorRepository {
     create(professor: Professor): Promise<Professor> {
         return new Promise(async (resolve, reject) => {
             try {
-                this.professorModel.create(
+                let mongooseProfessor: MongooseProfessorDto;
+                mongooseProfessor = await this.professorModel.create(
                     this.setDataFromProfessor(professor),
                 );
-                resolve(professor);
+                resolve(this.converToProfessor(mongooseProfessor));
             } catch (error) {
                 reject(error);
             }
