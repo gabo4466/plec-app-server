@@ -11,6 +11,8 @@ import {
 } from '../../infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 import { CommonModule } from '../common/common.module';
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from 'src/infrastructure/users/strategies/jwt.strategie';
 import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use-case';
 
 @Module({
@@ -22,9 +24,23 @@ import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use
                 collection: 'professor',
             },
         ]),
-        // PassportModule.register({
-        //     defaultStrategy: 'jwt',
-        // }),
+        PassportModule.register({
+            defaultStrategy: 'jwt',
+        }),
+
+        JwtModule.registerAsync({
+            imports: [],
+            inject: [],
+            useFactory: () => {
+                return {
+                    secret: process.env.JWT_SECRET,
+                    signOptions: {
+                        expiresIn: '12h',
+                    },
+                };
+            },
+        }),
+
         CommonModule,
     ],
     controllers: [AuthUsersController],
@@ -42,7 +58,10 @@ import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use
             provide: 'ProfessorRepository',
             useClass: MongooseProfessorRepository,
         },
+
+        // STRATEGIES
+        JwtStrategy,
     ],
-    exports: [],
+    exports: [JwtStrategy, PassportModule, JwtModule],
 })
 export class UsersModule {}
