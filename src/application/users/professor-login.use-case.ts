@@ -7,6 +7,8 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorCheckService } from '../../domain/users/services/professor/professor-check.service';
 import { CryptService } from '../../domain/common/services/crypt.service';
 import { UserException } from 'src/domain/users/exceptions/user.exception';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from 'src/domain/users/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class ProfessorLoginUseCase {
@@ -14,7 +16,12 @@ export class ProfessorLoginUseCase {
         private readonly professorCheckService: ProfessorCheckService,
         @Inject('CryptService')
         private readonly cryptService: CryptService,
+        private readonly jwtService: JwtService,
     ) {}
+
+    private generateToken(payload: JwtPayload) {
+        return this.jwtService.sign(payload);
+    }
 
     async execute(professor: Professor) {
         const checkedProfessor = await this.professorCheckService.execute(
@@ -33,8 +40,10 @@ export class ProfessorLoginUseCase {
                 throw new UserException(2);
             }
 
-            //TODO:devolver JWT
-            return professor;
+            return {
+                ...checkedProfessor.toObject(),
+                token: this.generateToken({ id_user: checkedProfessor.id }),
+            };
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();

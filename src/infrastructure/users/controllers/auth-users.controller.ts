@@ -6,7 +6,6 @@ import { Auth } from '../decorators/auth.decorator';
 import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
 import { LoginProfessorDto } from '../dto/login-professor.dto';
 import { ProfessorLoginUseCase } from '../../../application/users/professor-login.use-case';
-import { Professor } from 'src/domain/users/professor';
 
 @Controller('auth')
 export class AuthUsersController {
@@ -25,7 +24,6 @@ export class AuthUsersController {
 
     @Post('/login')
     async login(@Body() loginProfessorDto: LoginProfessorDto) {
-        //TODO: retornar JWT
         const professor: Professor = new InfrastructureProfessor(
             loginProfessorDto,
         );

@@ -12,7 +12,7 @@ import {
 import { CommonModule } from '../common/common.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'src/infrastructure/users/strategies/jwt.strategie';
+import { JwtStrategy } from 'src/infrastructure/users/strategies/jwt.strategy';
 import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use-case';
 
 @Module({
