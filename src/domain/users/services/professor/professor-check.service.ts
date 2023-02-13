@@ -20,13 +20,13 @@ export class ProfessorCheckService {
         return this.professorRepository
             .findOneByTerm(professor.email)
             .then((professor) => {
-                return true;
+                return professor;
             })
             .catch((error) => {
                 if (error) {
                     throw error;
                 } else {
-                    return false;
+                    return;
                 }
             });
     }

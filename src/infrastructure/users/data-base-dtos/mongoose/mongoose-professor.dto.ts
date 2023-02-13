@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Professor } from 'src/domain/users/professor';
+import { ProfessorInt } from '../../interfaces/professor.interface';
 
 @Schema()
-export class MongooseProfessorDto extends Document {
+export class MongooseProfessorDto extends Document implements ProfessorInt {
     @Prop({
         unique: true,
     })
@@ -20,6 +20,21 @@ export class MongooseProfessorDto extends Document {
 
     @Prop()
     password: string;
+
+    @Prop({
+        default: ['user'],
+    })
+    roles: string[];
+
+    @Prop({
+        default: false,
+    })
+    isBanned: boolean;
+
+    @Prop({
+        default: true,
+    })
+    isActive: boolean;
 }
 
 export const ProfessorSchema =

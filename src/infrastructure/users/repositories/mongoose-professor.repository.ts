@@ -4,6 +4,7 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
+import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -19,16 +20,8 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             linkedin: professor.linkedin,
             password: professor.password,
             name: professor.name,
+            roles: professor.roles,
         };
-    }
-
-    converToProfessor(mongooseProfessor: MongooseProfessorDto) {
-        let professor = new Professor();
-        professor.email = mongooseProfessor.email;
-        professor.bio = mongooseProfessor.bio;
-        professor.linkedin = mongooseProfessor.linkedin;
-        professor.password = mongooseProfessor.password;
-        return professor;
     }
 
     search(term: string): Promise<Professor> {
@@ -53,7 +46,13 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 if (!mongooseProfessor) {
                     reject();
                 } else {
-                    resolve(this.converToProfessor(mongooseProfessor));
+                    console.log('Casteando mongooseProfessor a ProfessorInfr');
+                    console.log({ mongooseProfessor });
+
+                    let professorInfrastructure = new InfrastructureProfessor(
+                        mongooseProfessor,
+                    );
+                    resolve(professorInfrastructure);
                 }
             } catch (error) {
                 reject(error);
@@ -63,10 +62,14 @@ export class MongooseProfessorRepository implements ProfessorRepository {
     create(professor: Professor): Promise<Professor> {
         return new Promise(async (resolve, reject) => {
             try {
-                this.professorModel.create(
+                let mongooseProfessor: MongooseProfessorDto;
+                mongooseProfessor = await this.professorModel.create(
                     this.setDataFromProfessor(professor),
                 );
-                resolve(professor);
+                let professorInfrastructure = new InfrastructureProfessor(
+                    mongooseProfessor,
+                );
+                resolve(professorInfrastructure);
             } catch (error) {
                 reject(error);
             }
