@@ -46,10 +46,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 if (!mongooseProfessor) {
                     reject();
                 } else {
-                    console.log('Casteando mongooseProfessor a ProfessorInfr');
-                    console.log({ mongooseProfessor });
-
-                    let professorInfrastructure = new InfrastructureProfessor(
+                    const professorInfrastructure = new InfrastructureProfessor(
                         mongooseProfessor,
                     );
                     resolve(professorInfrastructure);

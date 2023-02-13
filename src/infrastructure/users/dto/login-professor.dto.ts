@@ -1,6 +1,5 @@
 import {
     IsEmail,
-    IsOptional,
     IsString,
     Matches,
     MaxLength,
@@ -8,22 +7,10 @@ import {
 } from 'class-validator';
 import { ProfessorInt } from '../interfaces/professor.interface';
 
-export class CreateProfessorDto implements ProfessorInt {
+export class LoginProfessorDto implements ProfessorInt {
     @IsString()
     @IsEmail()
     email: string;
-
-    @IsString()
-    @MinLength(2)
-    name: string;
-
-    @IsString()
-    @IsOptional()
-    linkedin: string;
-
-    @IsString()
-    @IsOptional()
-    bio: string;
 
     @IsString()
     @MinLength(6)
