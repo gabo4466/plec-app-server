@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class TagUseCase {
+export class TagCreateUseCase {
     constructor() {}
 
     execute() {}

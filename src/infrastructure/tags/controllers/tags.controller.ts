@@ -1,13 +1,23 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { TagCreateService } from '../../../domain/tags/services/tag-create.service';
 import { createTagDto } from '../dto/create-tag.dto';
+import { TagCreateUseCase } from '../../../application/tags/tag-create.use-case';
+import { Tag } from '../../../domain/tags/tag';
+import { Auth } from 'src/infrastructure/users/decorators/auth.decorator';
+import { GetUser } from 'src/infrastructure/users/decorators/get-user.decorator';
+import { Professor } from '../../../domain/users/professor';
 
 @Controller('tags')
-export class tagsController {
-    constructor(private readonly tagCreateService: TagCreateService) {}
+export class TagsController {
+    constructor(private readonly tagCreateUseCase: TagCreateUseCase) {}
 
     @Post()
-    async createTag(@Body() createTagDto: createTagDto) {
-        //TODO:
+    @Auth()
+    async createTag(
+        @Body() createTagDto: createTagDto,
+        @GetUser() professor: Professor,
+    ) {
+        return professor.toObject();
+        // const tag: Tag = new Tag();
+        // this.tagCreateUseCase.execute();
     }
 }
