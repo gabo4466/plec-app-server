@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ProfessorRegisterUseCase } from '../../../application/users/professor-register.use-case';
 import { CreateProfessorDto } from '../dto/create-professor.dto';
+import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
 import { LoginProfessorDto } from '../dto/login-professor.dto';
 import { ProfessorLoginUseCase } from '../../../application/users/professor-login.use-case';
 
@@ -13,7 +14,9 @@ export class AuthUsersController {
 
     @Post()
     async register(@Body() createProfessorDto: CreateProfessorDto) {
-        const professor = createProfessorDto.converToProfessor();
+        let professor: Professor = new InfrastructureProfessor(
+            createProfessorDto,
+        );
         return await this.professorRegisterUseCase.execute(professor);
     }
 

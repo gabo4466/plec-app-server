@@ -6,10 +6,9 @@ import {
     MaxLength,
     MinLength,
 } from 'class-validator';
-import { Professor } from 'src/domain/users/professor';
-import { ConvertToProfessorDto } from './convert-to-professor.dto';
+import { ProfessorInt } from '../interfaces/professor.interface';
 
-export class CreateProfessorDto implements ConvertToProfessorDto {
+export class CreateProfessorDto implements ProfessorInt {
     @IsString()
     @IsEmail()
     email: string;
@@ -34,14 +33,4 @@ export class CreateProfessorDto implements ConvertToProfessorDto {
             'The password must have a Uppercase, lowercase letter and a number',
     })
     password: string;
-
-    converToProfessor() {
-        const professor = new Professor();
-        professor.email = this.email;
-        professor.bio = this.bio;
-        professor.linkedin = this.linkedin;
-        professor.password = this.password;
-        professor.name = this.name;
-        return professor;
-    }
 }

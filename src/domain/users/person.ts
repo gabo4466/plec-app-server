@@ -1,6 +1,15 @@
 export abstract class Person {
     private _email: string;
     private _name: string;
+    private _id: string;
+
+    public get id() {
+        return this._id;
+    }
+
+    public set id(newId: string) {
+        this._id = newId;
+    }
 
     public get email() {
         return this._email;
