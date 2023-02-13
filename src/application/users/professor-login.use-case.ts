@@ -3,16 +3,14 @@ import {
     Injectable,
     InternalServerErrorException,
 } from '@nestjs/common';
-import { Professor } from '../../domain/users/professor';
-import { ProfessorCreateService } from '../../domain/users/services/professor/professor-create.service';
+import { Professor } from 'src/domain/users/professor';
 import { ProfessorCheckService } from '../../domain/users/services/professor/professor-check.service';
-import { UserException } from '../../domain/users/exceptions/user.exception';
 import { CryptService } from '../../domain/common/services/crypt.service';
+import { UserException } from 'src/domain/users/exceptions/user.exception';
 
 @Injectable()
-export class ProfessorRegisterUseCase {
+export class ProfessorLoginUseCase {
     constructor(
-        private readonly professorCreateService: ProfessorCreateService,
         private readonly professorCheckService: ProfessorCheckService,
         @Inject('CryptService')
         private readonly cryptService: CryptService,
@@ -20,16 +18,18 @@ export class ProfessorRegisterUseCase {
 
     async execute(professor: Professor) {
         try {
-            if (await this.professorCheckService.execute(professor)) {
-                throw new UserException(1);
+            if (!(await this.professorCheckService.execute(professor))) {
+                throw new UserException(2);
             }
 
-            professor.password = this.cryptService.encrypt(professor.password);
+            const password = this.cryptService.encrypt(professor.password);
 
-            const newProfessor = await this.professorCreateService.execute(
-                professor,
-            );
-            return newProfessor.toObject();
+            if (password !== professor.password) {
+                throw new UserException(2);
+            }
+
+            //TODO:devolver JWT
+            return professor;
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();
