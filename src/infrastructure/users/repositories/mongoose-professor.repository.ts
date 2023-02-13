@@ -23,8 +23,31 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         };
     }
 
-    search(term: string): Promise<Professor> {
-        throw new Error('Method not implemented.');
+    search(term: string, offset: number, limit: number): Promise<Professor[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const professors: Professor[] = [];
+                console.log(term);
+                //TODO: fix
+                let mongooseProfessors: MongooseProfessorDto[] =
+                    await this.professorModel
+                        .find()
+                        .where({ _name: `/${term}/` })
+                        .limit(limit)
+                        .skip(offset);
+                // .populate('name email linkedin bio');
+                console.log(mongooseProfessors);
+
+                mongooseProfessors.forEach((professor) => {
+                    const newProfessor = new Professor();
+                    newProfessor.setDataFromInt(professor);
+                    professors.push(newProfessor);
+                });
+                resolve(professors);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     findOneByTerm(term: string): Promise<Professor> {
         return new Promise(async (resolve, reject) => {
@@ -64,22 +87,6 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 const newProfessor = new Professor();
                 newProfessor.setDataFromInt(mongooseProfessor);
                 resolve(newProfessor);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-    getAll(offset: number, limit: number): Promise<Professor[]> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let mongooseProfessors: MongooseProfessorDto[] =
-                    await this.professorModel.find({
-                        take: limit,
-                        skip: offset,
-                    });
-                if (!mongooseProfessors) {
-                    reject();
-                }
             } catch (error) {
                 reject(error);
             }
