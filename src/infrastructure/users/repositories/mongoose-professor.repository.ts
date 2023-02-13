@@ -5,6 +5,7 @@ import { ProfessorRepository } from '../../../domain/users/repositories/professo
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
 import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
+import { catchError } from 'rxjs';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -73,7 +74,20 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         });
     }
     getAll(offset: number, limit: number): Promise<Professor[]> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                let mongooseProfessors: MongooseProfessorDto[] =
+                    await this.professorModel.find({
+                        take: limit,
+                        skip: offset,
+                    });
+                if (!mongooseProfessors) {
+                    reject();
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     update(professor: Professor): Promise<Professor> {
         throw new Error('Method not implemented.');
