@@ -4,8 +4,6 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
-import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
-import { catchError } from 'rxjs';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -47,10 +45,9 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 if (!mongooseProfessor) {
                     reject();
                 } else {
-                    const professorInfrastructure = new InfrastructureProfessor(
-                        mongooseProfessor,
-                    );
-                    resolve(professorInfrastructure);
+                    const professor = new Professor();
+                    professor.setDataFromInt(mongooseProfessor);
+                    resolve(professor);
                 }
             } catch (error) {
                 reject(error);
@@ -64,10 +61,9 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 mongooseProfessor = await this.professorModel.create(
                     this.setDataFromProfessor(professor),
                 );
-                let professorInfrastructure = new InfrastructureProfessor(
-                    mongooseProfessor,
-                );
-                resolve(professorInfrastructure);
+                const newProfessor = new Professor();
+                newProfessor.setDataFromInt(mongooseProfessor);
+                resolve(newProfessor);
             } catch (error) {
                 reject(error);
             }
