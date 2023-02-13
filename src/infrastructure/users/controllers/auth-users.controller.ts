@@ -1,6 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Professor } from 'src/domain/users/professor';
 import { ProfessorRegisterUseCase } from '../../../application/users/professor-register.use-case';
-import { CreateProfessorDto } from '../dto/create-professor.dto';
+import { RegisterProfessorDto } from '../dto/register-professor.dto';
+import { Auth } from '../decorators/auth.decorator';
+import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
 import { LoginProfessorDto } from '../dto/login-professor.dto';
 import { ProfessorLoginUseCase } from '../../../application/users/professor-login.use-case';
 
@@ -12,15 +15,24 @@ export class AuthUsersController {
     ) {}
 
     @Post()
-    async register(@Body() createProfessorDto: CreateProfessorDto) {
-        const professor = createProfessorDto.converToProfessor();
+    async register(@Body() registerProfessorDto: RegisterProfessorDto) {
+        const professor: Professor = new InfrastructureProfessor(
+            registerProfessorDto,
+        );
         return await this.professorRegisterUseCase.execute(professor);
     }
 
     @Post('/login')
     async login(@Body() loginProfessorDto: LoginProfessorDto) {
-        //TODO: retornar JWT
-        const professor = loginProfessorDto.converToProfessor();
+        const professor: Professor = new InfrastructureProfessor(
+            loginProfessorDto,
+        );
         return await this.professorLoginUseCase.execute(professor);
+    }
+
+    @Get('/prueba')
+    @Auth()
+    prueba() {
+        return { no: 'no autorizado' };
     }
 }
