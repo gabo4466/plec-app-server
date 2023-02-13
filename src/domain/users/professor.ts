@@ -8,6 +8,10 @@ export class Professor extends Person {
     private _isActive: boolean;
     private _isBanned: boolean;
 
+    constructor() {
+        super();
+    }
+
     setDataFromInt(professor: ProfessorInt) {
         this.email = professor.email;
         if (professor._id) {
@@ -31,10 +35,6 @@ export class Professor extends Person {
         if (professor.isActive !== undefined) {
             this.isActive = professor.isActive;
         }
-    }
-
-    constructor() {
-        super();
     }
 
     public get linkedin() {
