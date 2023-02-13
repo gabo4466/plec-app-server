@@ -24,7 +24,6 @@ export class ProfessorRegisterUseCase {
             if (await this.professorCheckService.execute(professor)) {
                 throw new UserException(1);
             }
-
             let newProfessor = await this.professorCreateService.execute(
                 professor,
             );

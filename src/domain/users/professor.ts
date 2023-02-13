@@ -4,6 +4,8 @@ export class Professor extends Person {
     private _bio: string;
     private _password: string;
     private _roles: string[];
+    private _isActive: boolean;
+    private _isBanned: boolean;
 
     constructor() {
         super();
@@ -43,6 +45,22 @@ export class Professor extends Person {
 
     public addRol(newRol: string) {
         this._roles.push(newRol);
+    }
+
+    public get isActive() {
+        return this._isActive;
+    }
+
+    public set isActive(newActive: boolean) {
+        this._isActive = newActive;
+    }
+
+    public get isBanned() {
+        return this._isBanned;
+    }
+
+    public set isBanned(newBanned: boolean) {
+        this._isBanned = newBanned;
     }
 
     public toObject() {

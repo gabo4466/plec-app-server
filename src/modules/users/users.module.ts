@@ -10,6 +10,7 @@ import {
     ProfessorSchema,
 } from '../../infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 import { CommonModule } from '../common/common.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
     imports: [
@@ -20,6 +21,9 @@ import { CommonModule } from '../common/common.module';
                 collection: 'professor',
             },
         ]),
+        // PassportModule.register({
+        //     defaultStrategy: 'jwt',
+        // }),
         CommonModule,
     ],
     controllers: [AuthUsersController],
