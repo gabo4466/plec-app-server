@@ -5,7 +5,7 @@ import {
     MaxLength,
     MinLength,
 } from 'class-validator';
-import { ProfessorInt } from '../interfaces/professor.interface';
+import { ProfessorInt } from '../../../domain/users/interfaces/professor.interface';
 
 export class LoginProfessorDto implements ProfessorInt {
     @IsString()
