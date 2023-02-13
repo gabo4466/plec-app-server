@@ -7,7 +7,7 @@ import {
 export const GetUser = createParamDecorator(
     (data: string, ctx: ExecutionContext) => {
         const req = ctx.switchToHttp().getRequest();
-        const professor = req.professor;
+        const professor = req.user;
         if (!professor) {
             throw new InternalServerErrorException('Something went wrong');
         }

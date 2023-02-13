@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { createTagDto } from '../dto/create-tag.dto';
-import { TagCreateUseCase } from '../../../application/tags/tag-create.use-case';
-import { Tag } from '../../../domain/tags/tag';
+import { TagCreateUseCase } from 'src/application/tags/tag-create.use-case';
+import { Tag } from 'src/domain/tags/tag';
 import { Auth } from 'src/infrastructure/users/decorators/auth.decorator';
 import { GetUser } from 'src/infrastructure/users/decorators/get-user.decorator';
-import { Professor } from '../../../domain/users/professor';
+import { Professor } from 'src/domain/users/professor';
 
 @Controller('tags')
 export class TagsController {
@@ -16,8 +16,8 @@ export class TagsController {
         @Body() createTagDto: createTagDto,
         @GetUser() professor: Professor,
     ) {
-        return professor.toObject();
-        // const tag: Tag = new Tag();
-        // this.tagCreateUseCase.execute();
+        const tag = new Tag();
+        tag.setDataFromInt(createTagDto);
+        return this.tagCreateUseCase.execute(tag, professor);
     }
 }
