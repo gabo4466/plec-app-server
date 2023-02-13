@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ProfessorInt } from '../interfaces/professor.interface';
 
-export class CreateProfessorDto implements ProfessorInt {
+export class RegisterProfessorDto implements ProfessorInt {
     @IsString()
     @IsEmail()
     email: string;

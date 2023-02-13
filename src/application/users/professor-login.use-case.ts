@@ -17,14 +17,19 @@ export class ProfessorLoginUseCase {
     ) {}
 
     async execute(professor: Professor) {
+        const checkedProfessor = await this.professorCheckService.execute(
+            professor,
+        );
         try {
-            if (!(await this.professorCheckService.execute(professor))) {
+            if (!checkedProfessor) {
                 throw new UserException(2);
             }
-
-            const password = this.cryptService.encrypt(professor.password);
-
-            if (password !== professor.password) {
+            if (
+                !this.cryptService.compare(
+                    professor.password,
+                    checkedProfessor.password,
+                )
+            ) {
                 throw new UserException(2);
             }
 

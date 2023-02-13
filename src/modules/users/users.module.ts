@@ -11,6 +11,7 @@ import {
 } from '../../infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 import { CommonModule } from '../common/common.module';
 import { PassportModule } from '@nestjs/passport';
+import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use-case';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { PassportModule } from '@nestjs/passport';
     providers: [
         // USE CASES
         ProfessorRegisterUseCase,
+        ProfessorLoginUseCase,
 
         // SERVICES
         ProfessorCreateService,
