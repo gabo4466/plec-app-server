@@ -1,30 +1,17 @@
+import { ConvertToProfessorDto } from './convert-to-professor.dto';
 import {
     IsEmail,
-    IsOptional,
     IsString,
     Matches,
     MaxLength,
     MinLength,
 } from 'class-validator';
 import { Professor } from 'src/domain/users/professor';
-import { ConvertToProfessorDto } from './convert-to-professor.dto';
 
-export class CreateProfessorDto implements ConvertToProfessorDto {
+export class LoginProfessorDto implements ConvertToProfessorDto {
     @IsString()
     @IsEmail()
     email: string;
-
-    @IsString()
-    @MinLength(2)
-    name: string;
-
-    @IsString()
-    @IsOptional()
-    linkedin: string;
-
-    @IsString()
-    @IsOptional()
-    bio: string;
 
     @IsString()
     @MinLength(6)
@@ -35,13 +22,10 @@ export class CreateProfessorDto implements ConvertToProfessorDto {
     })
     password: string;
 
-    converToProfessor() {
+    converToProfessor(): Professor {
         const professor = new Professor();
         professor.email = this.email;
-        professor.bio = this.bio;
-        professor.linkedin = this.linkedin;
         professor.password = this.password;
-        professor.name = this.name;
         return professor;
     }
 }
