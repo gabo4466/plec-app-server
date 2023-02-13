@@ -1,6 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Professor } from 'src/domain/users/professor';
 import { ProfessorRegisterUseCase } from '../../../application/users/professor-register.use-case';
+import { Auth } from '../decorators/auth.decorator';
 import { CreateProfessorDto } from '../dto/create-professor.dto';
 import { InfrastructureProfessor } from '../infrastructure-classes/infrastructure-professor';
 
@@ -16,5 +17,11 @@ export class AuthUsersController {
             createProfessorDto,
         );
         return await this.professorRegisterUseCase.execute(professor);
+    }
+
+    @Get('/prueba')
+    @Auth()
+    prueba() {
+        return { no: 'no autorizado' };
     }
 }
