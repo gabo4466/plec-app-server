@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { ProfessorInt } from '../../interfaces/professor.interface';
+import { ProfessorInt } from '../../../../domain/users/interfaces/professor.interface';
 
 @Schema()
 export class MongooseProfessorDto extends Document implements ProfessorInt {

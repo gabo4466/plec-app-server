@@ -1,3 +1,4 @@
+import { ProfessorInt } from './interfaces/professor.interface';
 import { Person } from './person';
 export class Professor extends Person {
     private _linkedin: string;
@@ -9,6 +10,31 @@ export class Professor extends Person {
 
     constructor() {
         super();
+    }
+
+    setDataFromInt(professor: ProfessorInt) {
+        this.email = professor.email;
+        if (professor._id) {
+            this.id = professor._id;
+        }
+        if (professor.bio) {
+            this.bio = professor.bio;
+        }
+        if (professor.linkedin) {
+            this.linkedin = professor.linkedin;
+        }
+        if (professor.password) {
+            this.password = professor.password;
+        }
+        if (professor.roles) {
+            this.roles = professor.roles;
+        }
+        if (professor.isBanned !== undefined) {
+            this.isBanned = professor.isBanned;
+        }
+        if (professor.isActive !== undefined) {
+            this.isActive = professor.isActive;
+        }
     }
 
     public get linkedin() {
