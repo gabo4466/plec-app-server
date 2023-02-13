@@ -28,9 +28,6 @@ export class MongooseTagRepository implements TagRepository {
             try {
                 let mongooseProfessor =
                     await this.professorRepository.findOneByTerm(professor.id);
-                console.log('buscamos profesor');
-                console.log(mongooseProfessor);
-
                 const mongooseTag = await this.tagModel.create({
                     ...this.setDataFromTag(tag),
                     professor: mongooseProfessor,
