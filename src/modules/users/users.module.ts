@@ -71,6 +71,6 @@ import { UpdateProfessorUseCase } from 'src/application/users/professor-update.u
         // STRATEGIES
         JwtStrategy,
     ],
-    exports: [JwtStrategy, PassportModule, JwtModule],
+    exports: [JwtStrategy, PassportModule, JwtModule, 'ProfessorRepository'],
 })
 export class UsersModule {}

@@ -12,7 +12,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         private readonly professorModel: Model<MongooseProfessorDto>,
     ) {}
 
-    setDataFromProfessor(professor: Professor) {
+    private setDataFromProfessor(professor: Professor) {
         return {
             email: professor.email,
             bio: professor.bio,
