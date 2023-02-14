@@ -17,6 +17,9 @@ export class Professor extends Person {
         if (professor._id) {
             this.id = professor._id;
         }
+        if (professor.name) {
+            this.name = professor.name;
+        }
         if (professor.bio) {
             this.bio = professor.bio;
         }

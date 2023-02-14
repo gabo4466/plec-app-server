@@ -27,15 +27,19 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         return new Promise(async (resolve, reject) => {
             try {
                 const professors: Professor[] = [];
-                console.log(term);
-                //TODO: fix
-                let mongooseProfessors: MongooseProfessorDto[] =
-                    await this.professorModel
-                        .find()
-                        .where({ _name: `/${term}/` })
-                        .limit(limit)
-                        .skip(offset);
-                // .populate('name email linkedin bio');
+
+                // find all mongooseProfessors filtering by isActive = true and isBanned = false and name like term
+                const mongooseProfessors = await this.professorModel
+                    .find({
+                        $and: [
+                            { name: { $regex: term, $options: 'i' } },
+                            { isActive: true },
+                            { isBanned: false },
+                        ],
+                    })
+                    .skip(offset)
+                    .limit(limit);
+
                 console.log(mongooseProfessors);
 
                 mongooseProfessors.forEach((professor) => {
