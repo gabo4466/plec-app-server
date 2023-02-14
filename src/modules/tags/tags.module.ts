@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TagCreateUseCase } from 'src/application/tags/tag-create.use-case';
+import { TagsCreateUseCase } from 'src/application/tags/tags-create.use-case';
 import { TagsController } from 'src/infrastructure/tags/controllers/tags.controller';
 import { UsersModule } from '../users/users.module';
-import { TagCreateService } from 'src/domain/tags/services/tag-create.service';
+import { TagsCreateService } from 'src/domain/tags/services/tags-create.service';
 import { MongooseTagRepository } from 'src/infrastructure/tags/repositories/mongoose-tag.repository';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TagsSearchUseCase } from '../../application/tags/tags-search.use-case';
 import {
     MongooseTagDto,
     TagSchema,
 } from '../../infrastructure/tags/data-base-dtos/mongoose/mongoose-tag.dto';
+import { TagsSearchService } from 'src/domain/tags/services/tags-search.service';
 
 @Module({
     imports: [
@@ -23,10 +25,12 @@ import {
     ],
     providers: [
         // SERVICES
-        TagCreateService,
+        TagsCreateService,
+        TagsSearchService,
 
         // USE CASES
-        TagCreateUseCase,
+        TagsCreateUseCase,
+        TagsSearchUseCase,
 
         // REPOSITORIES
         {

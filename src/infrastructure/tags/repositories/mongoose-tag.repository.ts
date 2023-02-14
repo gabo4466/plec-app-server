@@ -80,6 +80,7 @@ export class MongooseTagRepository implements TagRepository {
                     })
                     .skip(offset)
                     .limit(limit);
+                console.log(mongooseTags);
 
                 mongooseTags.forEach((mongooseTag) => {
                     const tag = new Tag();

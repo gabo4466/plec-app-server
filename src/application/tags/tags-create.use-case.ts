@@ -1,11 +1,11 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Tag } from 'src/domain/tags/tag';
 import { Professor } from 'src/domain/users/professor';
-import { TagCreateService } from '../../domain/tags/services/tag-create.service';
+import { TagsCreateService } from '../../domain/tags/services/tags-create.service';
 
 @Injectable()
-export class TagCreateUseCase {
-    constructor(private readonly tagCreateService: TagCreateService) {}
+export class TagsCreateUseCase {
+    constructor(private readonly tagCreateService: TagsCreateService) {}
 
     async execute(tag: Tag, professor: Professor) {
         try {

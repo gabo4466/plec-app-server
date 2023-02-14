@@ -4,7 +4,7 @@ import { Professor } from '../../users/professor';
 import { Tag } from '../tag';
 
 @Injectable()
-export class TagCreateService {
+export class TagsCreateService {
     constructor(
         @Inject('TagRepository')
         private readonly tagRepository: TagRepository,
