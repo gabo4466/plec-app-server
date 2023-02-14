@@ -4,7 +4,7 @@ import { Professor } from 'src/domain/users/professor';
 import { UserException } from 'src/domain/users/exceptions/user.exception';
 
 @Injectable()
-export class UpdateProfessorUseCase {
+export class ProfessorUpdateUseCase {
     constructor(
         private readonly professorUpdateService: ProfessorUpdateService,
     ) {}
