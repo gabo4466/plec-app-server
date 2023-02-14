@@ -121,4 +121,16 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             }
         });
     }
+
+    follow(mongoId: string, professor: Professor): Promise<void> {
+        return new Promise(async (resolve, reject) => {
+            try {
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    unfollow(mongoId: string, professor: Professor): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
 }

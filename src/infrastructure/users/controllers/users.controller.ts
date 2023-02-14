@@ -5,6 +5,7 @@ import {
     Get,
     Param,
     Patch,
+    Post,
     Query,
 } from '@nestjs/common';
 import { ProfessorSearchUseCase } from 'src/application/users/professor-search.use-case';
@@ -16,6 +17,7 @@ import { UpdateProfessorDto } from '../dto/update-professsor.dto';
 import { Professor } from 'src/domain/users/professor';
 import { ValidRoles } from 'src/domain/users/interfaces/valid-roles.enum';
 import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
+import { ProfessorFollowUseCase } from '../../../application/users/professor-follow.use-case';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +25,7 @@ export class UsersController {
         private readonly professorSearchUseCase: ProfessorSearchUseCase,
         private readonly professorUpdateUseCase: ProfessorUpdateUseCase,
         private readonly professorDeleteUseCase: ProfessorDeleteUseCase,
+        private readonly professorFollowUseCase: ProfessorFollowUseCase,
     ) {}
 
     @Get()
@@ -45,5 +48,11 @@ export class UsersController {
     @Auth(ValidRoles.mod, ValidRoles.admin)
     async delete(@Param('id') id: string) {
         return await this.professorDeleteUseCase.execute(id);
+    }
+
+    @Post(':id')
+    @Auth()
+    async follow(@Param('id') id: string, @GetUser() professor: Professor) {
+        return await this.professorFollowUseCase.execute(id, professor);
     }
 }
