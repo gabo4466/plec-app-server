@@ -4,7 +4,6 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
-import { log } from 'console';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -34,6 +33,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                             { name: { $regex: term, $options: 'i' } },
                             { isActive: true },
                             { isBanned: false },
+                            { isVerified: true },
                         ],
                     })
                     .select('id name email bio linkedin')
@@ -115,6 +115,30 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             try {
                 await this.professorModel.findByIdAndUpdate(id, {
                     isBanned: true,
+                });
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    activate(id: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.professorModel.findByIdAndUpdate(id, {
+                    isActive: true,
+                });
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    verify(id: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.professorModel.findByIdAndUpdate(id, {
+                    isVerified: true,
                 });
                 resolve(id);
             } catch (error) {
