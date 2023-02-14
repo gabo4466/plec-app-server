@@ -16,6 +16,7 @@ import { UpdateProfessorDto } from '../dto/update-professsor.dto';
 import { Professor } from 'src/domain/users/professor';
 import { ValidRoles } from 'src/domain/users/interfaces/valid-roles.enum';
 import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
+import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +24,7 @@ export class UsersController {
         private readonly professorSearchUseCase: ProfessorSearchUseCase,
         private readonly professorUpdateUseCase: ProfessorUpdateUseCase,
         private readonly professorDeleteUseCase: ProfessorDeleteUseCase,
+        private readonly professorProfileUseCase: ProfessorProfileUseCase,
     ) {}
 
     @Get()
@@ -45,5 +47,10 @@ export class UsersController {
     @Auth(ValidRoles.mod, ValidRoles.admin)
     async delete(@Param('id') id: string) {
         return await this.professorDeleteUseCase.execute(id);
+    }
+
+    @Get(':id')
+    async profile(@Param('id') id: string) {
+        return await this.professorProfileUseCase.execute(id);
     }
 }
