@@ -26,9 +26,7 @@ export class UsersController {
         @Body() updateProfessorDto: UpdateProfessorDto,
         @GetUser() professor: Professor,
     ) {
-        console.log(professor);
         professor.setDataFromInt(updateProfessorDto);
-        console.log(professor);
         return await this.updateProfessorUseCase.execute(professor);
     }
 }
