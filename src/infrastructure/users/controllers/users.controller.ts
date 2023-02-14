@@ -18,6 +18,7 @@ import { Professor } from 'src/domain/users/professor';
 import { ValidRoles } from 'src/domain/users/interfaces/valid-roles.enum';
 import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
 import { ProfessorFollowUseCase } from '../../../application/users/professor-follow.use-case';
+import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 
 @Controller('users')
 export class UsersController {
@@ -26,6 +27,7 @@ export class UsersController {
         private readonly professorUpdateUseCase: ProfessorUpdateUseCase,
         private readonly professorDeleteUseCase: ProfessorDeleteUseCase,
         private readonly professorFollowUseCase: ProfessorFollowUseCase,
+        private readonly professorProfileUseCase: ProfessorProfileUseCase,
     ) {}
 
     @Get()
@@ -54,5 +56,10 @@ export class UsersController {
     @Auth()
     async follow(@Param('id') id: string, @GetUser() professor: Professor) {
         return await this.professorFollowUseCase.execute(id, professor);
+    }
+
+    @Get(':id')
+    async profile(@Param('id') id: string) {
+        return await this.professorProfileUseCase.execute(id);
     }
 }

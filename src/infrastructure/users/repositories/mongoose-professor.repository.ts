@@ -36,6 +36,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                             { isBanned: false },
                         ],
                     })
+                    .select('id name email bio linkedin')
                     .skip(offset)
                     .limit(limit);
                 mongooseProfessors.forEach((professor) => {
