@@ -4,6 +4,7 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
+import { log } from 'console';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {

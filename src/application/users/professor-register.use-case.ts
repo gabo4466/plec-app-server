@@ -20,7 +20,7 @@ export class ProfessorRegisterUseCase {
 
     async execute(professor: Professor) {
         try {
-            if (await this.professorCheckService.execute(professor)) {
+            if (await this.professorCheckService.execute(professor.email)) {
                 throw new UserException(1);
             }
 

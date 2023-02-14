@@ -18,7 +18,10 @@ import { ProfessorSearchService } from '../../domain/users/services/professor/pr
 import { ProfessorSearchUseCase } from 'src/application/users/professor-search.use-case';
 import { UsersController } from '../../infrastructure/users/controllers/users.controller';
 import { ProfessorUpdateService } from 'src/domain/users/services/professor/professor-update.service';
-import { UpdateProfessorUseCase } from 'src/application/users/professor-update.use-case';
+import { ProfessorUpdateUseCase } from 'src/application/users/professor-update.use-case';
+
+import { ProfessorDeleteService } from 'src/domain/users/services/professor/professor-delete.service';
+import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
 
 @Module({
     imports: [
@@ -54,13 +57,15 @@ import { UpdateProfessorUseCase } from 'src/application/users/professor-update.u
         ProfessorRegisterUseCase,
         ProfessorLoginUseCase,
         ProfessorSearchUseCase,
-        UpdateProfessorUseCase,
+        ProfessorUpdateUseCase,
+        ProfessorDeleteUseCase,
 
         // SERVICES
         ProfessorCreateService,
         ProfessorCheckService,
         ProfessorSearchService,
         ProfessorUpdateService,
+        ProfessorDeleteService,
 
         // REPOSITORIES
         {
