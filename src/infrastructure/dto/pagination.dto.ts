@@ -1,4 +1,10 @@
-import { IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
+import {
+    IsNumber,
+    IsOptional,
+    IsPositive,
+    IsString,
+    Min,
+} from 'class-validator';
 
 export class PaginationDto {
     @IsOptional()
@@ -9,6 +15,9 @@ export class PaginationDto {
 
     @IsOptional()
     @IsNumber()
-    @IsPositive()
     offset?: number;
+
+    @IsOptional()
+    @IsString()
+    term?: string;
 }
