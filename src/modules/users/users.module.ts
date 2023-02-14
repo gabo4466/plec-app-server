@@ -62,6 +62,6 @@ import { ProfessorLoginUseCase } from 'src/application/users/professor-login.use
         // STRATEGIES
         JwtStrategy,
     ],
-    exports: [JwtStrategy, PassportModule, JwtModule],
+    exports: [JwtStrategy, PassportModule, JwtModule, 'ProfessorRepository'],
 })
 export class UsersModule {}
