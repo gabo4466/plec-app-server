@@ -5,7 +5,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ProfessorRepository } from 'src/domain/users/repositories/professor.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { MongooseTagDto } from '../data-base-dtos/mongoose/mongoose-tag.dto';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 
 @Injectable()
 export class MongooseTagRepository implements TagRepository {
@@ -42,10 +42,55 @@ export class MongooseTagRepository implements TagRepository {
         throw new Error('Method not implemented.');
     }
     findOneByTerm(term: string): Promise<Tag> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                let mongooseTag: MongooseTagDto;
+                if (isValidObjectId(term)) {
+                    mongooseTag = await this.tagModel.findById(term);
+                }
+
+                if (!mongooseTag) {
+                    mongooseTag = await this.tagModel.findOne({
+                        name: term.toLowerCase().trim(),
+                    });
+                }
+
+                if (!mongooseTag) {
+                    reject();
+                } else {
+                    const tag = new Tag();
+                    tag.setDataFromInt(mongooseTag);
+                    resolve(tag);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
-    search(term: string): Promise<Tag> {
-        throw new Error('Method not implemented.');
+    search(term: string, offset: number, limit: number): Promise<Tag[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let tags: Tag[] = [];
+                const mongooseTags = await this.tagModel
+                    .find({
+                        name: {
+                            $regex: term,
+                            $options: 'i',
+                        },
+                    })
+                    .skip(offset)
+                    .limit(limit);
+
+                mongooseTags.forEach((mongooseTag) => {
+                    const tag = new Tag();
+                    tag.setDataFromInt(mongooseTag);
+                    tags.push(tag);
+                });
+                resolve(tags);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     delete(id: string): Promise<any> {
         throw new Error('Method not implemented.');
