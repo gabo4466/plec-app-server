@@ -4,6 +4,7 @@ import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
 import { isValidObjectId, Model } from 'mongoose';
+import { log } from 'console';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -23,8 +24,30 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         };
     }
 
-    search(term: string): Promise<Professor> {
-        throw new Error('Method not implemented.');
+    search(term: string, offset: number, limit: number): Promise<Professor[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const professors: Professor[] = [];
+                const mongooseProfessors = await this.professorModel
+                    .find({
+                        $and: [
+                            { name: { $regex: term, $options: 'i' } },
+                            { isActive: true },
+                            { isBanned: false },
+                        ],
+                    })
+                    .skip(offset)
+                    .limit(limit);
+                mongooseProfessors.forEach((professor) => {
+                    const newProfessor = new Professor();
+                    newProfessor.setDataFromInt(professor);
+                    professors.push(newProfessor);
+                });
+                resolve(professors);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     findOneByTerm(term: string): Promise<Professor> {
         return new Promise(async (resolve, reject) => {
@@ -69,13 +92,33 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             }
         });
     }
-    getAll(offset: number, limit: number): Promise<Professor[]> {
-        throw new Error('Method not implemented.');
-    }
     update(professor: Professor): Promise<Professor> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                let mongooseProfessor: MongooseProfessorDto;
+                mongooseProfessor = await this.professorModel.findByIdAndUpdate(
+                    professor.id,
+                    this.setDataFromProfessor(professor),
+                    { new: true },
+                );
+                const newProfessor = new Professor();
+                newProfessor.setDataFromInt(mongooseProfessor);
+                resolve(newProfessor);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     delete(id: string): Promise<any> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.professorModel.findByIdAndUpdate(id, {
+                    isBanned: true,
+                });
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }
