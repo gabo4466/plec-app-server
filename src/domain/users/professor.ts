@@ -13,7 +13,9 @@ export class Professor extends Person {
     }
 
     setDataFromInt(professor: ProfessorInt) {
-        this.email = professor.email;
+        if (professor.email) {
+            this.email = professor.email;
+        }
         if (professor._id) {
             this.id = professor._id;
         }

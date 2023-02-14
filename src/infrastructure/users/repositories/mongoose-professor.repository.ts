@@ -27,8 +27,6 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         return new Promise(async (resolve, reject) => {
             try {
                 const professors: Professor[] = [];
-
-                // find all mongooseProfessors filtering by isActive = true and isBanned = false and name like term
                 const mongooseProfessors = await this.professorModel
                     .find({
                         $and: [
@@ -39,9 +37,6 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                     })
                     .skip(offset)
                     .limit(limit);
-
-                console.log(mongooseProfessors);
-
                 mongooseProfessors.forEach((professor) => {
                     const newProfessor = new Professor();
                     newProfessor.setDataFromInt(professor);
@@ -97,9 +92,32 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         });
     }
     update(professor: Professor): Promise<Professor> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                let mongooseProfessor: MongooseProfessorDto;
+                mongooseProfessor = await this.professorModel.findByIdAndUpdate(
+                    professor.id,
+                    this.setDataFromProfessor(professor),
+                    { new: true },
+                );
+                const newProfessor = new Professor();
+                newProfessor.setDataFromInt(mongooseProfessor);
+                resolve(newProfessor);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     delete(id: string): Promise<any> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.professorModel.findByIdAndUpdate(id, {
+                    isBanned: true,
+                });
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }
