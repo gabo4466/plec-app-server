@@ -27,7 +27,7 @@ export class UserRoleGuard implements CanActivate {
         }
 
         const request = context.switchToHttp().getRequest();
-        const professor = request.professor as Professor;
+        const professor = request.user as Professor;
         if (!professor) {
             throw new BadRequestException('User not found');
         }

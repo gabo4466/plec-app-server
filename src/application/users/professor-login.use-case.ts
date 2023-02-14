@@ -25,7 +25,7 @@ export class ProfessorLoginUseCase {
 
     async execute(professor: Professor) {
         const checkedProfessor = await this.professorCheckService.execute(
-            professor,
+            professor.email,
         );
         try {
             if (!checkedProfessor) {
