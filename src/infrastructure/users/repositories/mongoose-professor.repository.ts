@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
-import { isValidObjectId, Model } from 'mongoose';
+import mongoose, { isValidObjectId, Model, ObjectId } from 'mongoose';
 import { log } from 'console';
 
 @Injectable()
@@ -125,8 +125,41 @@ export class MongooseProfessorRepository implements ProfessorRepository {
 
     follow(mongoId: string, professor: Professor): Promise<void> {
         return new Promise(async (resolve, reject) => {
+            //TODO: implent transaction
+
             try {
+                if (
+                    !isValidObjectId(mongoId) ||
+                    !isValidObjectId(professor.id.toString())
+                ) {
+                    console.log('error1');
+                    throw new Error('Invalid ID');
+                }
+
+                if (mongoId === professor.id.toString()) {
+                    console.log('error');
+                    throw new Error('You cannot follow yourself');
+                }
+
+                await this.professorModel.findByIdAndUpdate(
+                    professor.id,
+                    {
+                        $addToSet: { followed: mongoId },
+                    },
+                    { new: true },
+                );
+
+                await this.professorModel.findByIdAndUpdate(
+                    mongoId,
+                    {
+                        $addToSet: { followers: professor.id },
+                    },
+                    { new: true },
+                );
+
+                resolve();
             } catch (error) {
+                console.log(error);
                 reject(error);
             }
         });

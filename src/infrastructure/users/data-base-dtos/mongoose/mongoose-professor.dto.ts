@@ -38,18 +38,26 @@ export class MongooseProfessorDto extends Document implements ProfessorInt {
     isActive: boolean;
 
     @Prop({
-        type: mongoose.Schema.Types.ObjectId,
-        ref: MongooseProfessorDto.name,
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: MongooseProfessorDto.name,
+            },
+        ],
     })
     @Type(() => MongooseProfessorDto)
-    followers: MongooseProfessorDto[];
+    followers: MongooseProfessorDto;
 
     @Prop({
-        type: mongoose.Schema.Types.ObjectId,
-        ref: MongooseProfessorDto.name,
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: MongooseProfessorDto.name,
+            },
+        ],
     })
     @Type(() => MongooseProfessorDto)
-    followed: MongooseProfessorDto[];
+    followed: MongooseProfessorDto;
 }
 
 export const ProfessorSchema =

@@ -24,6 +24,8 @@ import { ProfessorDeleteService } from 'src/domain/users/services/professor/prof
 import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 import { ProfessorProfileService } from 'src/domain/users/services/professor/professor-profile.service';
+import { ProfessorFollowUseCase } from 'src/application/users/professor-follow.use-case';
+import { ProfessorFollowService } from 'src/domain/users/services/professor/professor-follow.service';
 
 @Module({
     imports: [
@@ -62,6 +64,7 @@ import { ProfessorProfileService } from 'src/domain/users/services/professor/pro
         ProfessorUpdateUseCase,
         ProfessorDeleteUseCase,
         ProfessorProfileUseCase,
+        ProfessorFollowUseCase,
 
         // SERVICES
         ProfessorCreateService,
@@ -70,6 +73,7 @@ import { ProfessorProfileService } from 'src/domain/users/services/professor/pro
         ProfessorUpdateService,
         ProfessorDeleteService,
         ProfessorProfileService,
+        ProfessorFollowService,
 
         // REPOSITORIES
         {

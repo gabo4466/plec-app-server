@@ -9,6 +9,6 @@ export class ProfessorFollowUseCase {
     ) {}
 
     execute(mongoId: string, professor: Professor) {
-        this.professorFollowService.execute(mongoId, professor);
+        return this.professorFollowService.execute(mongoId, professor);
     }
 }
