@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { AnswerInt } from 'src/domain/questions/interfaces/answer.interface';
 
 @Schema()
-export class MongooseAnswerDto {
+export class MongooseAnswerDto implements AnswerInt {
     @Prop()
     public text: string;
     @Prop()
