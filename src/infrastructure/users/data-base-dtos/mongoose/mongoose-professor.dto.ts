@@ -32,7 +32,7 @@ export class MongooseProfessorDto extends Document implements ProfessorInt {
     isBanned: boolean;
 
     @Prop({
-        default: false,
+        default: true,
     })
     isActive: boolean;
 
