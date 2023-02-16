@@ -9,6 +9,7 @@ export class TagsCreateUseCase {
 
     async execute(tag: Tag, professor: Professor) {
         try {
+            // TODO: FIRST CHECK IF TAG ALREADY EXISTS
             const newTag = await this.tagCreateService.execute(tag, professor);
             return newTag;
         } catch (error) {

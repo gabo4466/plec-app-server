@@ -29,6 +29,7 @@ export class QuestionsController {
         professor: Professor,
     ) {
         question.setDataFromInt(createQuestionDto);
-        return this.questionCreateUseCase.execute(question, professor);
+        question.setProfessor(professor);
+        return this.questionCreateUseCase.execute(question);
     }
 }

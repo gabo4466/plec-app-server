@@ -1,12 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import Question from 'src/domain/questions/question';
-import { Professor } from 'src/domain/users/professor';
+import { QuestionsCreateService } from 'src/domain/questions/services/questions-create.service';
 
 @Injectable()
 export class QuestionCreateUseCase {
-    constructor() {}
+    constructor(
+        private readonly questionCreateService: QuestionsCreateService,
+    ) {}
 
-    public async execute(question: Question<any>, professor: Professor) {
-        return 'Hello World!';
+    public async execute(question: Question<any>) {
+        try {
+            const questionCreated = await this.questionCreateService.execute(
+                question,
+            );
+            return questionCreated;
+        } catch (error) {
+            throw new InternalServerErrorException();
+        }
     }
 }

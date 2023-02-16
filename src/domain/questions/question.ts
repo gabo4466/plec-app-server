@@ -1,5 +1,6 @@
 import { Answer } from './answer';
 import { QuestionInt } from 'src/domain/questions/interfaces/question.interface';
+import { Professor } from '../users/professor';
 
 export default abstract class Question<T> {
     private _id: number;
@@ -8,6 +9,7 @@ export default abstract class Question<T> {
     private _answers: Answer[];
     private _tagsIds: string[];
     private _difficulty: number;
+    private _professor: Professor;
 
     public get id(): number {
         return this._id;
@@ -57,13 +59,21 @@ export default abstract class Question<T> {
         this._difficulty = value;
     }
 
+    public get professor(): Professor {
+        return this._professor;
+    }
+
+    public setProfessor(professor: Professor) {
+        this._professor = professor;
+    }
+
     public abstract get type(): string;
 
     public abstract get correctAnswer(): T;
 
     public setDataFromInt(question: QuestionInt) {
-        if (question.id) {
-            this.id = question.id;
+        if (question._id) {
+            this.id = question._id;
         }
         if (question.description) {
             this.description = question.description;
@@ -84,6 +94,11 @@ export default abstract class Question<T> {
 
         if (question.difficulty) {
             this.difficulty = question.difficulty;
+        }
+
+        if (question.professor) {
+            this._professor = new Professor();
+            this._professor.setDataFromInt(question.professor);
         }
     }
 }

@@ -9,6 +9,7 @@ import { MongooseQuestionRepository } from 'src/infrastructure/questions/reposit
 import { QuestionsController } from '../../infrastructure/questions/controllers/questions.controller';
 import { UsersModule } from '../users/users.module';
 import { QuestionCreateUseCase } from 'src/application/questions/question-create.use-case';
+import { QuestionsCreateService } from 'src/domain/questions/services/questions-create.service';
 
 @Module({
     controllers: [QuestionsController],
@@ -28,13 +29,13 @@ import { QuestionCreateUseCase } from 'src/application/questions/question-create
     ],
     providers: [
         // Repositories
-
         {
             provide: 'QuestionRepository',
             useClass: MongooseQuestionRepository,
         },
 
         // Services
+        QuestionsCreateService,
 
         // UseCases
         QuestionCreateUseCase,
