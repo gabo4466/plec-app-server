@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ProfessorRepository } from '../../repositories/professor.repository';
 
 @Injectable()
-export class ProfessorDeleteService {
+export class ProfessorActivateService {
     constructor(
         @Inject('ProfessorRepository')
         private readonly professorRepository: ProfessorRepository,
@@ -10,7 +10,7 @@ export class ProfessorDeleteService {
 
     async execute(id: string) {
         return this.professorRepository
-            .delete(id)
+            .activate(id)
             .then((id) => {
                 return id;
             })

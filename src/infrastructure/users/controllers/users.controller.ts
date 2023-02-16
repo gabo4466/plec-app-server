@@ -1,7 +1,6 @@
 import {
     Body,
     Controller,
-    Delete,
     Get,
     Param,
     Patch,
@@ -15,8 +14,6 @@ import { Auth } from '../decorators/auth.decorator';
 import { GetUser } from '../decorators/get-user.decorator';
 import { UpdateProfessorDto } from '../dto/update-professsor.dto';
 import { Professor } from 'src/domain/users/professor';
-import { ValidRoles } from 'src/domain/users/interfaces/valid-roles.enum';
-import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
 import { ProfessorFollowUseCase } from '../../../application/users/professor-follow.use-case';
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 
@@ -25,7 +22,6 @@ export class UsersController {
     constructor(
         private readonly professorSearchUseCase: ProfessorSearchUseCase,
         private readonly professorUpdateUseCase: ProfessorUpdateUseCase,
-        private readonly professorDeleteUseCase: ProfessorDeleteUseCase,
         private readonly professorFollowUseCase: ProfessorFollowUseCase,
         private readonly professorProfileUseCase: ProfessorProfileUseCase,
     ) {}
@@ -46,11 +42,6 @@ export class UsersController {
         return await this.professorUpdateUseCase.execute(professor);
     }
 
-    @Delete(':id')
-    @Auth(ValidRoles.mod, ValidRoles.admin)
-    async delete(@Param('id') id: string) {
-        return await this.professorDeleteUseCase.execute(id);
-    }
 
     @Post(':id')
     @Auth()
