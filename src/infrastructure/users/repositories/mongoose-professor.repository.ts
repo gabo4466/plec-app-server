@@ -50,6 +50,40 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             }
         });
     }
+    modSearch(
+        term: string,
+        offset: number,
+        limit: number,
+        isActive: boolean = true,
+        isBanned: boolean = false,
+        isVerified: boolean = true,
+    ): Promise<Professor[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const professors: Professor[] = [];
+                const mongooseProfessors = await this.professorModel
+                    .find({
+                        $and: [
+                            { name: { $regex: term, $options: 'i' } },
+                            { isActive: isActive },
+                            { isBanned: isBanned },
+                            { isVerified: isVerified },
+                        ],
+                    })
+                    .select('id name email bio linkedin')
+                    .skip(offset)
+                    .limit(limit);
+                mongooseProfessors.forEach((professor) => {
+                    const newProfessor = new Professor();
+                    newProfessor.setDataFromInt(professor);
+                    professors.push(newProfessor);
+                });
+                resolve(professors);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
     findOneByTerm(term: string): Promise<Professor> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -140,6 +174,23 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                 await this.professorModel.findByIdAndUpdate(id, {
                     isVerified: true,
                 });
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    roleUpdate(id: string, role: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let mongooseProfessor: MongooseProfessorDto;
+                mongooseProfessor = await this.professorModel.findByIdAndUpdate(
+                    id,
+                    {
+                        $addToSet: { roles: role },
+                    },
+                    { new: true },
+                );
                 resolve(id);
             } catch (error) {
                 reject(error);

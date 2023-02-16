@@ -27,6 +27,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (professor.isBanned) {
             throw new UnauthorizedException('User is banned');
         }
+        if (!professor.isVerified) {
+            throw new UnauthorizedException('User is not verified');
+        }
         return professor;
     }
 }
