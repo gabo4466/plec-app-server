@@ -7,7 +7,7 @@ export default abstract class Question<T> {
     private _description: string;
     private _image: string;
     private _answers: Answer[];
-    private _tagsIds: string[];
+    private _tags: string[];
     private _difficulty: number;
     private _professor: Professor;
 
@@ -43,12 +43,12 @@ export default abstract class Question<T> {
         this._answers = value;
     }
 
-    public get tagsIds(): string[] {
-        return this._tagsIds;
+    public get tags(): string[] {
+        return this._tags;
     }
 
-    public set tagsIds(value: string[]) {
-        this._tagsIds = value;
+    public set tags(value: string[]) {
+        this._tags = value;
     }
 
     public get difficulty(): number {
@@ -89,7 +89,7 @@ export default abstract class Question<T> {
             });
         }
         if (question.tags) {
-            this.tagsIds = question.tags;
+            this.tags = question.tags;
         }
 
         if (question.difficulty) {
