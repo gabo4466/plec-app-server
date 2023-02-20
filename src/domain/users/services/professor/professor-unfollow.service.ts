@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProfessorRepository } from '../../repositories/professor.repository';
 import { Professor } from '../../professor';
+import { ProfessorRepository } from '../../repositories/professor.repository';
+
 @Injectable()
-export class ProfessorFollowService {
+export class ProfessorUnfollowService {
     constructor(
         @Inject('ProfessorRepository')
         private readonly professorRepository: ProfessorRepository,
@@ -10,7 +11,7 @@ export class ProfessorFollowService {
 
     async execute(mongoId: string, professor: Professor) {
         return this.professorRepository
-            .follow(mongoId, professor)
+            .unfollow(mongoId, professor)
             .then((res) => {
                 return res;
             })

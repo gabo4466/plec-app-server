@@ -1,17 +1,17 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserException } from 'src/domain/users/exceptions/user.exception';
 import { Professor } from 'src/domain/users/professor';
-import { ProfessorFollowService } from 'src/domain/users/services/professor/professor-follow.service';
+import { ProfessorUnfollowService } from 'src/domain/users/services/professor/professor-unfollow.service';
 
 @Injectable()
-export class ProfessorFollowUseCase {
+export class ProfessorUnfollowUseCase {
     constructor(
-        private readonly professorFollowService: ProfessorFollowService,
+        private readonly professorUnfollowService: ProfessorUnfollowService,
     ) {}
 
     async execute(mongoId: string, professor: Professor) {
         try {
-            return await this.professorFollowService.execute(
+            return await this.professorUnfollowService.execute(
                 mongoId,
                 professor,
             );

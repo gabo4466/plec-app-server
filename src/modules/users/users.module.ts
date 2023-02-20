@@ -35,6 +35,8 @@ import { ProfessorVerifyService } from 'src/domain/users/services/professor/prof
 import { ProfessorModSearchUseCase } from 'src/application/users/professor-mod-search.use-case';
 import { ProfessorModSearchService } from 'src/domain/users/services/professor/professor-mod-search.service';
 import { ModUsersController } from 'src/infrastructure/users/controllers/mod-users.controller';
+import { ProfessorUnfollowUseCase } from 'src/application/users/professor-unfollow.use-case';
+import { ProfessorUnfollowService } from 'src/domain/users/services/professor/professor-unfollow.service';
 
 @Module({
     imports: [
@@ -78,6 +80,7 @@ import { ModUsersController } from 'src/infrastructure/users/controllers/mod-use
         ProfessorVerifyUseCase,
         ProfessorModSearchUseCase,
         ProfessorFollowUseCase,
+        ProfessorUnfollowUseCase,
 
         // SERVICES
         ProfessorCreateService,
@@ -91,6 +94,7 @@ import { ModUsersController } from 'src/infrastructure/users/controllers/mod-use
         ProfessorActivateService,
         ProfessorVerifyService,
         ProfessorModSearchService,
+        ProfessorUnfollowService,
 
         // REPOSITORIES
         {

@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Patch,
@@ -16,6 +17,7 @@ import { UpdateProfessorDto } from '../dto/update-professsor.dto';
 import { Professor } from 'src/domain/users/professor';
 import { ProfessorFollowUseCase } from '../../../application/users/professor-follow.use-case';
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
+import { ProfessorUnfollowUseCase } from 'src/application/users/professor-unfollow.use-case';
 
 @Controller('users')
 export class UsersController {
@@ -24,6 +26,7 @@ export class UsersController {
         private readonly professorUpdateUseCase: ProfessorUpdateUseCase,
         private readonly professorFollowUseCase: ProfessorFollowUseCase,
         private readonly professorProfileUseCase: ProfessorProfileUseCase,
+        private readonly professorUnfollowUseCase: ProfessorUnfollowUseCase,
     ) {}
 
     @Get()
@@ -42,11 +45,16 @@ export class UsersController {
         return await this.professorUpdateUseCase.execute(professor);
     }
 
-
     @Post(':id')
     @Auth()
     async follow(@Param('id') id: string, @GetUser() professor: Professor) {
         return await this.professorFollowUseCase.execute(id, professor);
+    }
+
+    @Delete(':id')
+    @Auth()
+    async unfollow(@Param('id') id: string, @GetUser() professor: Professor) {
+        return await this.professorUnfollowUseCase.execute(id, professor);
     }
 
     @Get(':id')

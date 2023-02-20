@@ -174,7 +174,6 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                     console.log('error');
                     throw new Error('You cannot follow yourself');
                 }
-
                 await this.professorModel.findByIdAndUpdate(
                     professor.id,
                     {
@@ -198,9 +197,47 @@ export class MongooseProfessorRepository implements ProfessorRepository {
             }
         });
     }
+
     unfollow(mongoId: string, professor: Professor): Promise<void> {
-        throw new Error('Method not implemented.');
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (
+                    !isValidObjectId(mongoId) ||
+                    !isValidObjectId(professor.id.toString())
+                ) {
+                    console.log('error1');
+                    throw new Error('Invalid ID');
+                }
+
+                if (mongoId === professor.id.toString()) {
+                    console.log('error');
+                    throw new Error('You cannot unfollow yourself');
+                }
+
+                await this.professorModel.findByIdAndUpdate(
+                    professor.id,
+
+                    {
+                        $pull: { followed: mongoId },
+                    },
+                    { new: true },
+                );
+                await this.professorModel.findByIdAndUpdate(
+                    mongoId,
+                    {
+                        $pull: { followers: professor.id },
+                    },
+                    { new: true },
+                );
+
+                resolve();
+            } catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
+
     activate(id: string): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
