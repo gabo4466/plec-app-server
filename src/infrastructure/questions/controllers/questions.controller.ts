@@ -78,13 +78,13 @@ export class QuestionsController {
         return this.createQuestion(createQuestionDto, question, user);
     }
 
-    private createQuestion(
+    private async createQuestion(
         createQuestionDto: CreateQuestionDto,
         question: Question<any>,
         professor: Professor,
     ) {
         question.setDataFromInt(createQuestionDto);
         question.setProfessor(professor);
-        return this.questionCreateUseCase.execute(question);
+        return await this.questionCreateUseCase.execute(question);
     }
 }
