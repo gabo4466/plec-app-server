@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Professor } from 'src/domain/users/professor';
 import { ProfessorRepository } from '../../../domain/users/repositories/professor.repository';
 import { MongooseProfessorDto } from '../data-base-dtos/mongoose/mongoose-professor.dto';
-import mongoose, { isValidObjectId, Model, ObjectId } from 'mongoose';
+import mongoose, { isValidObjectId, Model } from 'mongoose';
 
 @Injectable()
 export class MongooseProfessorRepository implements ProfessorRepository {
@@ -160,20 +160,25 @@ export class MongooseProfessorRepository implements ProfessorRepository {
     follow(mongoId: string, professor: Professor): Promise<void> {
         return new Promise(async (resolve, reject) => {
             //TODO: implent transaction
+            // const db = await mongoose
+            //     .createConnection(process.env.MONGOURL)
+            //     .asPromise();
+            // const session = await db.startSession();
 
+            //   console.log('pasó');
             try {
                 if (
                     !isValidObjectId(mongoId) ||
                     !isValidObjectId(professor.id.toString())
                 ) {
-                    console.log('error1');
                     throw new Error('Invalid ID');
                 }
 
                 if (mongoId === professor.id.toString()) {
-                    console.log('error');
                     throw new Error('You cannot follow yourself');
                 }
+                //  await session.startTransaction();
+
                 await this.professorModel.findByIdAndUpdate(
                     professor.id,
                     {
@@ -181,6 +186,7 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                     },
                     { new: true },
                 );
+                // .session(session);
 
                 await this.professorModel.findByIdAndUpdate(
                     mongoId,
@@ -189,10 +195,16 @@ export class MongooseProfessorRepository implements ProfessorRepository {
                     },
                     { new: true },
                 );
+                //  .session(session);
 
+                //   await session.commitTransaction();
+                //  session.endSession();
                 resolve();
             } catch (error) {
-                console.log(error);
+                // await session.abortTransaction();
+                // session.endSession();
+
+                //  console.log(error);
                 reject(error);
             }
         });
