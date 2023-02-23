@@ -7,6 +7,7 @@ export class Professor extends Person {
     private _roles: string[];
     private _isActive: boolean;
     private _isBanned: boolean;
+    private _isVerified: boolean;
 
     constructor() {
         super();
@@ -39,6 +40,9 @@ export class Professor extends Person {
         }
         if (professor.isActive !== undefined) {
             this.isActive = professor.isActive;
+        }
+        if (professor.isVerified !== undefined) {
+            this.isVerified = professor.isVerified;
         }
     }
 
@@ -92,6 +96,14 @@ export class Professor extends Person {
 
     public set isBanned(newBanned: boolean) {
         this._isBanned = newBanned;
+    }
+
+    public get isVerified() {
+        return this._isVerified;
+    }
+
+    public set isVerified(newVerified: boolean) {
+        this._isVerified = newVerified;
     }
 
     public toObject() {

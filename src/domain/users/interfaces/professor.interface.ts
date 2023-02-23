@@ -8,4 +8,5 @@ export interface ProfessorInt {
     roles?: string[];
     isActive?: boolean;
     isBanned?: boolean;
+    isVerified?: boolean;
 }

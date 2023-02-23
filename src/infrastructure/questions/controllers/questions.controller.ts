@@ -6,6 +6,11 @@ import { CreateQuestionDto } from '../dto/create-question.dto';
 import { SimpleSelectionQuestion } from 'src/domain/questions/simple-selection-question';
 import { QuestionCreateUseCase } from 'src/application/questions/question-create.use-case';
 import Question from 'src/domain/questions/question';
+import { MultipleSelectionQuestion } from 'src/domain/questions/multiple-selection-question';
+import { TrueFalseQuestion } from 'src/domain/questions/true-false-question';
+import { OrderQuestion } from 'src/domain/questions/order-question';
+import { WrittenQuestion } from 'src/domain/questions/written-question';
+import { OfftopicQuestion } from 'src/domain/questions/offtopic-question';
 
 @Controller('questions')
 export class QuestionsController {
@@ -23,13 +28,63 @@ export class QuestionsController {
         return this.createQuestion(createQuestionDto, question, user);
     }
 
-    private createQuestion(
+    @Post('mulple-selection')
+    @Auth()
+    async createMultipleSelectionQuestion(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @GetUser() user: Professor,
+    ) {
+        const question = new MultipleSelectionQuestion();
+        return this.createQuestion(createQuestionDto, question, user);
+    }
+
+    @Post('true-false')
+    @Auth()
+    async createTrueFalseQuestion(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @GetUser() user: Professor,
+    ) {
+        const question = new TrueFalseQuestion();
+        return this.createQuestion(createQuestionDto, question, user);
+    }
+
+    @Post('order')
+    @Auth()
+    async createOrderQuestion(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @GetUser() user: Professor,
+    ) {
+        const question = new OrderQuestion();
+        return this.createQuestion(createQuestionDto, question, user);
+    }
+
+    @Post('written')
+    @Auth()
+    async createWrittenQuestion(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @GetUser() user: Professor,
+    ) {
+        const question = new WrittenQuestion();
+        return this.createQuestion(createQuestionDto, question, user);
+    }
+
+    @Post('offtopic')
+    @Auth()
+    async createOfftopicQuestion(
+        @Body() createQuestionDto: CreateQuestionDto,
+        @GetUser() user: Professor,
+    ) {
+        const question = new OfftopicQuestion();
+        return this.createQuestion(createQuestionDto, question, user);
+    }
+
+    private async createQuestion(
         createQuestionDto: CreateQuestionDto,
         question: Question<any>,
         professor: Professor,
     ) {
         question.setDataFromInt(createQuestionDto);
         question.setProfessor(professor);
-        return this.questionCreateUseCase.execute(question);
+        return await this.questionCreateUseCase.execute(question);
     }
 }
