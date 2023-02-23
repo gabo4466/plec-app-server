@@ -31,9 +31,10 @@ export class MongooseQuestionRepository implements QuestionRepository {
         return new Promise(async (resolve, reject) => {
             try {
                 const mongooseQuestion: MongooseQuestionDto =
-                    await this.mongooseQuestionModel.create(
-                        this.setDataFromQuestion(question),
-                    );
+                    await this.mongooseQuestionModel.create({
+                        ...this.setDataFromQuestion(question),
+                    });
+
                 question.setDataFromInt(mongooseQuestion);
                 resolve(question);
             } catch (error) {
