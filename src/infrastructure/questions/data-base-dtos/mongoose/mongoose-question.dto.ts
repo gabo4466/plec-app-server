@@ -1,11 +1,12 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { AnswerSchema, MongooseAnswerDto } from './mongoose-answer.dto';
 import { QuestionInt } from 'src/domain/questions/interfaces/question.interface';
 import { MongooseProfessorDto } from 'src/infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 import { Type } from 'class-transformer';
 
-export class MongooseQuestionDto extends Document implements QuestionInt {
+@Schema()
+export class MongooseQuestionDto extends Document {
     @Prop({
         default: false,
     })
@@ -23,7 +24,7 @@ export class MongooseQuestionDto extends Document implements QuestionInt {
     @Prop({
         type: [
             {
-                AnswerSchema,
+                type: AnswerSchema,
             },
         ],
     })

@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseQuestionDto } from 'src/infrastructure/questions/data-base-dtos/mongoose/mongoose-question.dto';
+import {
+    MongooseQuestionDto,
+    QuestionSchema,
+} from 'src/infrastructure/questions/data-base-dtos/mongoose/mongoose-question.dto';
 import {
     AnswerSchema,
     MongooseAnswerDto,
@@ -15,13 +18,13 @@ import { QuestionsCreateService } from 'src/domain/questions/services/questions-
     controllers: [QuestionsController],
     imports: [
         MongooseModule.forFeature([
-            {
-                name: MongooseAnswerDto.name,
-                schema: AnswerSchema,
-            },
+            // {
+            //     name: MongooseAnswerDto.name,
+            //     schema: AnswerSchema,
+            // },
             {
                 name: MongooseQuestionDto.name,
-                schema: AnswerSchema,
+                schema: QuestionSchema,
                 collection: 'questions',
             },
         ]),
