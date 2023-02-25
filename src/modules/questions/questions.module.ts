@@ -13,6 +13,7 @@ import { QuestionsController } from '../../infrastructure/questions/controllers/
 import { UsersModule } from '../users/users.module';
 import { QuestionCreateUseCase } from 'src/application/questions/question-create.use-case';
 import { QuestionsCreateService } from 'src/domain/questions/services/questions-create.service';
+import { TagsModule } from '../tags/tags.module';
 
 @Module({
     controllers: [QuestionsController],
@@ -29,6 +30,7 @@ import { QuestionsCreateService } from 'src/domain/questions/services/questions-
             },
         ]),
         UsersModule,
+        TagsModule,
     ],
     providers: [
         // Repositories

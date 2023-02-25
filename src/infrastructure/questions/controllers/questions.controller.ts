@@ -11,6 +11,7 @@ import { TrueFalseQuestion } from 'src/domain/questions/true-false-question';
 import { OrderQuestion } from 'src/domain/questions/order-question';
 import { WrittenQuestion } from 'src/domain/questions/written-question';
 import { OfftopicQuestion } from 'src/domain/questions/offtopic-question';
+import { log } from 'console';
 
 @Controller('questions')
 export class QuestionsController {
@@ -83,8 +84,9 @@ export class QuestionsController {
         question: Question<any>,
         professor: Professor,
     ) {
+        const { tagsIds } = createQuestionDto;
         question.setDataFromInt(createQuestionDto);
         question.setProfessor(professor);
-        return await this.questionCreateUseCase.execute(question);
+        return await this.questionCreateUseCase.execute(question, tagsIds);
     }
 }

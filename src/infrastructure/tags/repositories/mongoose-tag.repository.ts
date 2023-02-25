@@ -39,7 +39,6 @@ export class MongooseTagRepository implements TagRepository {
                 reject(error);
             }
         });
-        throw new Error('Method not implemented.');
     }
     findOneByTerm(term: string): Promise<Tag> {
         return new Promise(async (resolve, reject) => {

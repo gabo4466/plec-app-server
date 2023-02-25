@@ -1,13 +1,14 @@
 import { Answer } from './answer';
 import { QuestionInt } from 'src/domain/questions/interfaces/question.interface';
 import { Professor } from '../users/professor';
+import { Tag } from '../tags/tag';
 
 export default abstract class Question<T> {
     private _id: number;
     private _description: string;
     private _image: string;
     private _answers: Answer[];
-    private _tags: string[];
+    private _tags: Tag[];
     private _difficulty: number;
     private _professor: Professor;
 
@@ -43,11 +44,11 @@ export default abstract class Question<T> {
         this._answers = value;
     }
 
-    public get tags(): string[] {
+    public get tags(): Tag[] {
         return this._tags;
     }
 
-    public set tags(value: string[]) {
+    public set tags(value: Tag[]) {
         this._tags = value;
     }
 
@@ -89,7 +90,11 @@ export default abstract class Question<T> {
             });
         }
         if (question.tags) {
-            this.tags = question.tags;
+            this.tags = question.tags.map((tag) => {
+                const newTag = new Tag();
+                newTag.setDataFromInt(tag);
+                return newTag;
+            });
         }
 
         if (question.difficulty) {

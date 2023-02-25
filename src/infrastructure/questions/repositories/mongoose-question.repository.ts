@@ -24,6 +24,7 @@ export class MongooseQuestionRepository implements QuestionRepository {
                 };
             }),
             professor: question.professor.id,
+            tags: question.tags,
         };
     }
 

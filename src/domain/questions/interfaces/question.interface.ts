@@ -1,3 +1,4 @@
+import { TagInt } from 'src/domain/tags/interfaces/tag.interface';
 import { ProfessorInt } from 'src/domain/users/interfaces/professor.interface';
 import { AnswerInt } from './answer.interface';
 
@@ -7,7 +8,7 @@ export interface QuestionInt {
     answers?: AnswerInt[];
     type?: string;
     image?: string;
-    tags?: string[];
+    tags?: TagInt[];
     difficulty?: number;
     professor?: ProfessorInt;
 }

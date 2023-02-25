@@ -4,6 +4,7 @@ import { AnswerSchema, MongooseAnswerDto } from './mongoose-answer.dto';
 import { QuestionInt } from 'src/domain/questions/interfaces/question.interface';
 import { MongooseProfessorDto } from 'src/infrastructure/users/data-base-dtos/mongoose/mongoose-professor.dto';
 import { Type } from 'class-transformer';
+import { MongooseTagDto } from 'src/infrastructure/tags/data-base-dtos/mongoose/mongoose-tag.dto';
 
 @Schema()
 export class MongooseQuestionDto extends Document {
@@ -36,6 +37,17 @@ export class MongooseQuestionDto extends Document {
     })
     @Type(() => MongooseProfessorDto)
     professor: MongooseProfessorDto;
+
+    @Prop({
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: MongooseTagDto.name,
+            },
+        ],
+    })
+    @Type(() => MongooseTagDto)
+    tags: MongooseTagDto[];
 }
 
 export const QuestionSchema = SchemaFactory.createForClass(MongooseQuestionDto);

@@ -25,4 +25,7 @@ export class CreateQuestionDto implements QuestionInt {
         each: true,
     })
     answers: AnswerInt[];
+
+    @IsArray()
+    tagsIds: string[];
 }
