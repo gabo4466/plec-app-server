@@ -35,6 +35,11 @@ export class MongooseProfessorDto extends Document implements ProfessorInt {
         default: true,
     })
     isActive: boolean;
+
+    @Prop({
+        default: false,
+    })
+    isVerified: boolean;
 }
 
 export const ProfessorSchema =
