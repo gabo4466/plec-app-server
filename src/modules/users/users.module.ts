@@ -24,6 +24,8 @@ import { ProfessorDeleteService } from 'src/domain/users/services/professor/prof
 import { ProfessorDeleteUseCase } from 'src/application/users/professor-delete.use-case';
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 import { ProfessorProfileService } from 'src/domain/users/services/professor/professor-profile.service';
+import { ProfessorFollowUseCase } from 'src/application/users/professor-follow.use-case';
+import { ProfessorFollowService } from 'src/domain/users/services/professor/professor-follow.service';
 import { ProfessorRoleUpdateUseCase } from 'src/application/users/professor-role-update.use-case';
 import { ProfessorRoleUpdateService } from 'src/domain/users/services/professor/professor-role-update.service';
 import { ProfessorActivateUseCase } from 'src/application/users/professor-activate.use-case';
@@ -33,6 +35,8 @@ import { ProfessorVerifyService } from 'src/domain/users/services/professor/prof
 import { ProfessorModSearchUseCase } from 'src/application/users/professor-mod-search.use-case';
 import { ProfessorModSearchService } from 'src/domain/users/services/professor/professor-mod-search.service';
 import { ModUsersController } from 'src/infrastructure/users/controllers/mod-users.controller';
+import { ProfessorUnfollowUseCase } from 'src/application/users/professor-unfollow.use-case';
+import { ProfessorUnfollowService } from 'src/domain/users/services/professor/professor-unfollow.service';
 
 @Module({
     imports: [
@@ -75,6 +79,8 @@ import { ModUsersController } from 'src/infrastructure/users/controllers/mod-use
         ProfessorActivateUseCase,
         ProfessorVerifyUseCase,
         ProfessorModSearchUseCase,
+        ProfessorFollowUseCase,
+        ProfessorUnfollowUseCase,
 
         // SERVICES
         ProfessorCreateService,
@@ -83,10 +89,12 @@ import { ModUsersController } from 'src/infrastructure/users/controllers/mod-use
         ProfessorUpdateService,
         ProfessorDeleteService,
         ProfessorProfileService,
+        ProfessorFollowService,
         ProfessorRoleUpdateService,
         ProfessorActivateService,
         ProfessorVerifyService,
         ProfessorModSearchService,
+        ProfessorUnfollowService,
 
         // REPOSITORIES
         {
