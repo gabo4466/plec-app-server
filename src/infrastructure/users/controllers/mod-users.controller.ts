@@ -8,7 +8,7 @@ import { ValidRoles } from 'src/domain/users/interfaces/valid-roles.enum';
 import { PaginationDto } from 'src/infrastructure/dto/pagination.dto';
 import { Auth } from '../decorators/auth.decorator';
 
-@Controller('users/mod')
+@Controller('mod/users/professors')
 export class ModUsersController {
     constructor(
         private readonly professorDeleteUseCase: ProfessorDeleteUseCase,

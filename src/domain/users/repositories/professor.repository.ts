@@ -12,4 +12,7 @@ export interface ProfessorRepository extends CRUDRepository<Professor> {
         isBanned: boolean,
         isVerified: boolean,
     ): Promise<Professor[]>;
+
+    follow(mongoId: string, professor: Professor): Promise<void>;
+    unfollow(mongoId: string, professor: Professor): Promise<void>;
 }
