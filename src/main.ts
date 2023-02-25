@@ -2,10 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
-// TODO: CARGAR EL ARCHIVO DE CONFIGURACIÓN DE FIREBASE DESDE EL .ENV
-
 async function bootstrap() {
     console.log(JSON.parse(process.env.FIREBASE_ADMIN_CREDENTIALS));
+    // TODO: LOG IN TO FIREBASE ADMIN
 
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(
