@@ -8,7 +8,7 @@ import { UpdateProfessorDto } from '../dto/update-professsor.dto';
 import { Professor } from 'src/domain/users/professor';
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 
-@Controller('users')
+@Controller('users/professors')
 export class UsersController {
     constructor(
         private readonly professorSearchUseCase: ProfessorSearchUseCase,
