@@ -48,6 +48,9 @@ export class MongooseQuestionDto extends Document {
     })
     @Type(() => MongooseTagDto)
     tags: MongooseTagDto[];
+
+    @Prop()
+    type: string;
 }
 
 export const QuestionSchema = SchemaFactory.createForClass(MongooseQuestionDto);

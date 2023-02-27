@@ -3,7 +3,7 @@ import { ProfessorInt } from 'src/domain/users/interfaces/professor.interface';
 import { AnswerInt } from './answer.interface';
 
 export interface QuestionInt {
-    _id?: number;
+    _id?: string;
     description?: string;
     answers?: AnswerInt[];
     type?: string;

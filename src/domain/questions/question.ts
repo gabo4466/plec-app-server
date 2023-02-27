@@ -4,7 +4,7 @@ import { Professor } from '../users/professor';
 import { Tag } from '../tags/tag';
 
 export default abstract class Question<T> {
-    private _id: number;
+    private _id: string;
     private _description: string;
     private _image: string;
     private _answers: Answer[];
@@ -12,11 +12,11 @@ export default abstract class Question<T> {
     private _difficulty: number;
     private _professor: Professor;
 
-    public get id(): number {
+    public get id(): string {
         return this._id;
     }
 
-    public set id(value: number) {
+    public set id(value: string) {
         this._id = value;
     }
 
@@ -82,6 +82,7 @@ export default abstract class Question<T> {
         if (question.image) {
             this.image = question.image;
         }
+
         if (question.answers) {
             this.answers = question.answers.map((answer) => {
                 const newAnswer = new Answer();
