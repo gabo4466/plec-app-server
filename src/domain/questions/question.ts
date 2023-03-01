@@ -5,67 +5,15 @@ import { Tag } from '../tags/tag';
 
 export default abstract class Question<T> {
     private _id: string;
-    private _description: string;
-    private _image: string;
-    private _answers: Answer[];
-    private _tags: Tag[];
-    private _difficulty: number;
-    private _professor: Professor;
+    public description: string;
+    public image: string;
+    public answers: Answer[];
+    public tags: Tag[];
+    public difficulty: number;
+    public professor: Professor;
 
     public get id(): string {
         return this._id;
-    }
-
-    public set id(value: string) {
-        this._id = value;
-    }
-
-    public get description(): string {
-        return this._description;
-    }
-
-    public set description(value: string) {
-        this._description = value;
-    }
-
-    public get image(): string {
-        return this._image;
-    }
-
-    public set image(value: string) {
-        this._image = value;
-    }
-
-    public get answers(): Answer[] {
-        return this._answers;
-    }
-
-    public set answers(value: Answer[]) {
-        this._answers = value;
-    }
-
-    public get tags(): Tag[] {
-        return this._tags;
-    }
-
-    public set tags(value: Tag[]) {
-        this._tags = value;
-    }
-
-    public get difficulty(): number {
-        return this._difficulty;
-    }
-
-    public set difficulty(value: number) {
-        this._difficulty = value;
-    }
-
-    public get professor(): Professor {
-        return this._professor;
-    }
-
-    public setProfessor(professor: Professor) {
-        this._professor = professor;
     }
 
     public abstract get type(): string;
@@ -74,7 +22,7 @@ export default abstract class Question<T> {
 
     public setDataFromInt(question: QuestionInt) {
         if (question._id) {
-            this.id = question._id;
+            this._id = question._id;
         }
         if (question.description) {
             this.description = question.description;
@@ -103,8 +51,8 @@ export default abstract class Question<T> {
         }
 
         if (question.professor) {
-            this._professor = new Professor();
-            this._professor.setDataFromInt(question.professor);
+            this.professor = new Professor();
+            this.professor.setDataFromInt(question.professor);
         }
     }
 }

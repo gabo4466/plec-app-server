@@ -92,7 +92,7 @@ export class QuestionsController {
     ) {
         const { tagsIds } = createQuestionDto;
         question.setDataFromInt(createQuestionDto);
-        question.setProfessor(professor);
+        question.professor = professor;
         return await this.questionCreateUseCase.execute(question, tagsIds);
     }
 }
