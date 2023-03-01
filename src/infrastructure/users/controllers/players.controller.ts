@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { PlayerCreateUseCase } from 'src/application/users/player-create.use-case';
+import { Player } from 'src/domain/users/player';
 import { CreatePlayerDto } from '../dto/create-player.dto';
 
 @Controller('users/players')
@@ -8,6 +9,8 @@ export class PlayersController {
 
     @Post('')
     async createPlayer(@Body() createPlayerDto: CreatePlayerDto) {
-        return 'works';
+        const player = createPlayerDto as Player;
+
+        return this.playerCreateUseCase.execute(player);
     }
 }

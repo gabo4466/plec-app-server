@@ -12,7 +12,9 @@ export class PlayerCreateUseCase {
 
     async execute(newPlayer: Player) {
         try {
-            let player = await this.playerFindByTermService.execute('email');
+            let player = await this.playerFindByTermService.execute(
+                newPlayer.email,
+            );
 
             if (!player) {
                 player = await this.playerCreateService.execute(newPlayer);
