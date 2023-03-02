@@ -10,9 +10,14 @@ export class MongoosePlayerDto {
     email: string;
 
     @Prop({
-        default: 0,
+        unique: true,
     })
-    experience: number;
+    nickname: string;
+
+    // @Prop({
+    //     default: 0,
+    // })
+    // experience: number;
 }
 
 export const PlayerSchema = SchemaFactory.createForClass(MongoosePlayerDto);

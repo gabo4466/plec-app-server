@@ -13,6 +13,6 @@ export interface ProfessorRepository extends CRUDRepository<Professor> {
         isVerified: boolean,
     ): Promise<Professor[]>;
 
-    follow(mongoId: string, professor: Professor): Promise<void>;
-    unfollow(mongoId: string, professor: Professor): Promise<void>;
+    // follow(mongoId: string, professor: Professor): Promise<void>;
+    // unfollow(mongoId: string, professor: Professor): Promise<void>;
 }

@@ -47,6 +47,12 @@ export class MongoosePlayerRepository implements PlayerRepository {
                         email: term.toLowerCase().trim(),
                     });
                 }
+                // Nickname
+                if (!mongoosePlayer) {
+                    mongoosePlayer = await this.playerModel.findOne({
+                        nickname: term.toLowerCase().trim(),
+                    });
+                }
                 if (!mongoosePlayer) {
                     reject();
                 } else {
