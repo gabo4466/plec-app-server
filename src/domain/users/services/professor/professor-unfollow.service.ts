@@ -10,13 +10,13 @@ export class ProfessorUnfollowService {
     ) {}
 
     async execute(mongoId: string, professor: Professor) {
-        return this.professorRepository
-            .unfollow(mongoId, professor)
-            .then((res) => {
-                return res;
-            })
-            .catch((error) => {
-                throw error;
-            });
+        // return this.professorRepository
+        //     .unfollow(mongoId, professor)
+        //     .then((res) => {
+        //         return res;
+        //     })
+        //     .catch((error) => {
+        //         throw error;
+        //     });
     }
 }

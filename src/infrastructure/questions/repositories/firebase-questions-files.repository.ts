@@ -11,7 +11,6 @@ export class FirebaseQuestionsFilesRepository
         const storage = getStorage().bucket(process.env.FIRESTORAGE_BUCKET);
 
         const file = await storage.file(`questions/${fileName}`).download();
-        console.log(file[0]);
 
         return file[0];
     }
