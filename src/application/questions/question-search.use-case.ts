@@ -37,6 +37,12 @@ export class QuestionSearchUseCase {
                 limit,
             );
         } catch (error) {
+            if (
+                error instanceof UserException ||
+                error instanceof TagException
+            ) {
+                error.manageException();
+            }
             throw new InternalServerErrorException();
         }
     }

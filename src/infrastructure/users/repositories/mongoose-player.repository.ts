@@ -15,8 +15,24 @@ export class MongoosePlayerRepository implements PlayerRepository {
     search(term: string, offset: number, limit: number): Promise<Player[]> {
         throw new Error('Method not implemented.');
     }
-    update(obj: Player): Promise<Player> {
-        throw new Error('Method not implemented.');
+    update(player: Player): Promise<Player> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log(player.id);
+
+                const mongoosePlayer: MongoosePlayerDto =
+                    await this.playerModel.findByIdAndUpdate(
+                        player.id,
+                        player,
+                        { new: true },
+                    );
+
+                const newPlayer = mongoosePlayer as Player;
+                resolve(newPlayer);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
     delete(id: string): Promise<any> {
         throw new Error('Method not implemented.');
@@ -24,6 +40,7 @@ export class MongoosePlayerRepository implements PlayerRepository {
     async create(player: Player): Promise<Player> {
         return new Promise(async (resolve, reject) => {
             try {
+                player.nickname = player.email.split('@')[0].toLowerCase();
                 let mongoosePlayer: MongoosePlayerDto;
                 mongoosePlayer = await this.playerModel.create(player);
                 const newPlayer = mongoosePlayer as Player;

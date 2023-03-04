@@ -9,9 +9,7 @@ export class MongoosePlayerDto {
     })
     email: string;
 
-    @Prop({
-        unique: true,
-    })
+    @Prop()
     nickname: string;
 
     // @Prop({

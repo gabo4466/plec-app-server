@@ -46,6 +46,8 @@ import {
 import { MongoosePlayerRepository } from 'src/infrastructure/users/repositories/mongoose-player.repository';
 import { PlayerCreateService } from 'src/domain/users/services/player/player-create.service';
 import { PlayerFindByTermService } from 'src/domain/users/services/player/player-find-by-term.service';
+import { PlayerUpdateService } from 'src/domain/users/services/player/player-update.service';
+import { PlayerUpdateUseCase } from 'src/application/users/player-update.use-case';
 
 @Module({
     imports: [
@@ -102,6 +104,7 @@ import { PlayerFindByTermService } from 'src/domain/users/services/player/player
         ProfessorUnfollowUseCase,
 
         PlayerCreateUseCase,
+        PlayerUpdateUseCase,
 
         // SERVICES
         ProfessorCreateService,
@@ -119,6 +122,7 @@ import { PlayerFindByTermService } from 'src/domain/users/services/player/player
 
         PlayerCreateService,
         PlayerFindByTermService,
+        PlayerUpdateService,
 
         // REPOSITORIES
         {
