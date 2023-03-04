@@ -12,4 +12,8 @@ export class Tag {
         this.name = tag.name;
         this.color = tag.color;
     }
+
+    public get id(): string {
+        return this._id;
+    }
 }

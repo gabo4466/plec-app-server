@@ -39,10 +39,10 @@ export class ProfessorLoginUseCase {
             ) {
                 throw new UserException(2);
             }
-
+            delete checkedProfessor.password;
             return {
-                ...checkedProfessor.toObject(),
                 token: this.generateToken({ id_user: checkedProfessor.id }),
+                ...checkedProfessor,
             };
         } catch (error) {
             if (error instanceof UserException) {

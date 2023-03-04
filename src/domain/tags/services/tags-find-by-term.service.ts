@@ -18,7 +18,7 @@ export class TagsFindByTermService {
                 if (error) {
                     throw error;
                 }
-                return new Tag();
+                return;
             });
     }
 }

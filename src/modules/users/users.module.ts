@@ -139,6 +139,7 @@ import { PlayerFindByTermService } from 'src/domain/users/services/player/player
         JwtModule,
         'ProfessorRepository',
         'PlayerRepository',
+        ProfessorCheckService,
     ],
 })
 export class UsersModule {}

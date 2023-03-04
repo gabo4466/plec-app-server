@@ -29,7 +29,8 @@ export class ProfessorRegisterUseCase {
             const newProfessor = await this.professorCreateService.execute(
                 professor,
             );
-            return newProfessor.toObject();
+            delete newProfessor.password;
+            return newProfessor;
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();

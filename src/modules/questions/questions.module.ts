@@ -16,6 +16,8 @@ import { FirebaseQuestionsFilesRepository } from 'src/infrastructure/questions/r
 import { QuestionsFileController } from 'src/infrastructure/questions/controllers/questions-file.controller';
 import { QuestionUploadFileUseCase } from 'src/application/questions/question-upload-file.use-case';
 import { QuestionGetFileUseCase } from 'src/application/questions/question-get-file.use-case';
+import { QuestionSearchUseCase } from 'src/application/questions/question-search.use-case';
+import { QuestionsSearchByProfessorAndTagService } from 'src/domain/questions/services/questions-search-by-professor-and-tag.service';
 
 @Module({
     controllers: [QuestionsController, QuestionsFileController],
@@ -48,12 +50,14 @@ import { QuestionGetFileUseCase } from 'src/application/questions/question-get-f
         // Services
         QuestionsCreateService,
         QuestionsFindByIdService,
+        QuestionsSearchByProfessorAndTagService,
 
         // UseCases
         QuestionCreateUseCase,
         QuestionFindByIdUseCase,
         QuestionUploadFileUseCase,
         QuestionGetFileUseCase,
+        QuestionSearchUseCase,
     ],
     exports: ['QuestionsRepository', 'QuestionsFilesRepository'],
 })

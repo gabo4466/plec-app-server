@@ -22,7 +22,13 @@ export class QuestionCreateUseCase {
                     return await this.tagsFindByTermService.execute(tagId);
                 }),
             );
-            question.tags = tags;
+            const onlyTags: Tag[] = [];
+            tags.forEach((tag) => {
+                if (tag) {
+                    onlyTags.push(tag);
+                }
+            });
+            question.tags = onlyTags;
             const questionCreated = await this.questionCreateService.execute(
                 question,
             );
