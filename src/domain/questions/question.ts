@@ -11,12 +11,11 @@ export default abstract class Question<T> {
     public tags: Tag[];
     public difficulty: number;
     public professor: Professor;
+    public type: string;
 
     public get id(): string {
         return this._id;
     }
-
-    public abstract get type(): string;
 
     public abstract get correctAnswer(): T;
 

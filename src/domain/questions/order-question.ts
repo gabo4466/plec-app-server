@@ -1,8 +1,10 @@
 import Question from 'src/domain/questions/question';
 export class OrderQuestion extends Question<string[]> {
-    public get type(): string {
-        return 'order';
+    constructor() {
+        super();
+        this.type = 'order';
     }
+
     public get correctAnswer(): string[] {
         return this.answers
             .sort((answer1, answer2) => {
