@@ -6,7 +6,9 @@ import { MongooseProfessorDto } from '../../../users/data-base-dtos/mongoose/mon
 
 @Schema()
 export class MongooseTagDto extends Document implements TagInt {
-    @Prop()
+    @Prop({
+        unique: true,
+    })
     name: string;
     @Prop()
     color: string;
