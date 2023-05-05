@@ -37,6 +37,17 @@ import { ProfessorModSearchService } from 'src/domain/users/services/professor/p
 import { ModUsersController } from 'src/infrastructure/users/controllers/mod-users.controller';
 import { ProfessorUnfollowUseCase } from 'src/application/users/professor-unfollow.use-case';
 import { ProfessorUnfollowService } from 'src/domain/users/services/professor/professor-unfollow.service';
+import { PlayersController } from 'src/infrastructure/users/controllers/players.controller';
+import { PlayerCreateUseCase } from 'src/application/users/player-create.use-case';
+import {
+    MongoosePlayerDto,
+    PlayerSchema,
+} from 'src/infrastructure/users/data-base-dtos/mongoose/mongoose-player.dto';
+import { MongoosePlayerRepository } from 'src/infrastructure/users/repositories/mongoose-player.repository';
+import { PlayerCreateService } from 'src/domain/users/services/player/player-create.service';
+import { PlayerFindByTermService } from 'src/domain/users/services/player/player-find-by-term.service';
+import { PlayerUpdateService } from 'src/domain/users/services/player/player-update.service';
+import { PlayerUpdateUseCase } from 'src/application/users/player-update.use-case';
 
 @Module({
     imports: [
@@ -45,6 +56,11 @@ import { ProfessorUnfollowService } from 'src/domain/users/services/professor/pr
                 name: MongooseProfessorDto.name,
                 schema: ProfessorSchema,
                 collection: 'professor',
+            },
+            {
+                name: MongoosePlayerDto.name,
+                schema: PlayerSchema,
+                collection: 'player',
             },
         ]),
         PassportModule.register({
@@ -66,7 +82,12 @@ import { ProfessorUnfollowService } from 'src/domain/users/services/professor/pr
 
         CommonModule,
     ],
-    controllers: [AuthUsersController, UsersController, ModUsersController],
+    controllers: [
+        AuthUsersController,
+        UsersController,
+        ModUsersController,
+        PlayersController,
+    ],
     providers: [
         // USE CASES
         ProfessorRegisterUseCase,
@@ -82,6 +103,9 @@ import { ProfessorUnfollowService } from 'src/domain/users/services/professor/pr
         ProfessorFollowUseCase,
         ProfessorUnfollowUseCase,
 
+        PlayerCreateUseCase,
+        PlayerUpdateUseCase,
+
         // SERVICES
         ProfessorCreateService,
         ProfessorCheckService,
@@ -96,15 +120,30 @@ import { ProfessorUnfollowService } from 'src/domain/users/services/professor/pr
         ProfessorModSearchService,
         ProfessorUnfollowService,
 
+        PlayerCreateService,
+        PlayerFindByTermService,
+        PlayerUpdateService,
+
         // REPOSITORIES
         {
             provide: 'ProfessorRepository',
             useClass: MongooseProfessorRepository,
         },
+        {
+            provide: 'PlayerRepository',
+            useClass: MongoosePlayerRepository,
+        },
 
         // STRATEGIES
         JwtStrategy,
     ],
-    exports: [JwtStrategy, PassportModule, JwtModule, 'ProfessorRepository'],
+    exports: [
+        JwtStrategy,
+        PassportModule,
+        JwtModule,
+        'ProfessorRepository',
+        'PlayerRepository',
+        ProfessorCheckService,
+    ],
 })
 export class UsersModule {}

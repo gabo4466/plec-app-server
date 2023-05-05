@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import Question from '../question';
-import { QuestionRepository } from '../repositories/question.repository';
+import { QuestionsRepository } from '../repositories/questions.repository';
 
 @Injectable()
 export class QuestionsCreateService {
     constructor(
-        @Inject('QuestionRepository')
-        private readonly questionRepository: QuestionRepository,
+        @Inject('QuestionsRepository')
+        private readonly questionRepository: QuestionsRepository,
     ) {}
 
     public async execute(question: Question<any>) {

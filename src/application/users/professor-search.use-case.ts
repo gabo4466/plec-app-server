@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserException } from 'src/domain/users/exceptions/user.exception';
 import { Professor } from 'src/domain/users/professor';
-import { ProfessorSearchService } from '../../domain/users/services/professor/professor-search.service';
+import { ProfessorSearchService } from 'src/domain/users/services/professor/professor-search.service';
 
 @Injectable()
 export class ProfessorSearchUseCase {
