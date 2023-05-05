@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { createTagDto } from '../dto/create-tag.dto';
 import { TagsCreateUseCase } from 'src/application/tags/tags-create.use-case';
 import { Tag } from 'src/domain/tags/tag';

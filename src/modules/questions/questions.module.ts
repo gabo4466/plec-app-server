@@ -18,6 +18,7 @@ import { QuestionUploadFileUseCase } from 'src/application/questions/question-up
 import { QuestionGetFileUseCase } from 'src/application/questions/question-get-file.use-case';
 import { QuestionSearchUseCase } from 'src/application/questions/question-search.use-case';
 import { QuestionsSearchByProfessorAndTagService } from 'src/domain/questions/services/questions-search-by-professor-and-tag.service';
+import { QuestionsFindByProfessorService } from 'src/domain/questions/services/questions-find-by-professor.service';
 
 @Module({
     controllers: [QuestionsController, QuestionsFileController],
@@ -51,6 +52,7 @@ import { QuestionsSearchByProfessorAndTagService } from 'src/domain/questions/se
         QuestionsCreateService,
         QuestionsFindByIdService,
         QuestionsSearchByProfessorAndTagService,
+        QuestionsFindByProfessorService,
 
         // UseCases
         QuestionCreateUseCase,
@@ -59,6 +61,11 @@ import { QuestionsSearchByProfessorAndTagService } from 'src/domain/questions/se
         QuestionGetFileUseCase,
         QuestionSearchUseCase,
     ],
-    exports: ['QuestionsRepository', 'QuestionsFilesRepository'],
+    exports: [
+        'QuestionsRepository',
+        'QuestionsFilesRepository',
+        QuestionFindByIdUseCase,
+        QuestionsFindByProfessorService,
+    ],
 })
 export class QuestionsModule {}

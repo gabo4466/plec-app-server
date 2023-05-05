@@ -19,6 +19,28 @@ export class MongooseQuestionRepository implements QuestionsRepository {
         private readonly mongooseQuestionModel: Model<MongooseQuestionDto>,
     ) {}
 
+    findByProfessor(professor: Professor) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const mongooseQuestions: MongooseQuestionDto[] =
+                    await this.mongooseQuestionModel
+                        .find({ professor: professor.id })
+                        .populate('professor', 'name email _id')
+                        .populate('tags');
+                const questions: Question<any>[] = mongooseQuestions.map(
+                    (mongooseQuestion) => {
+                        return this.instantiateQuestionFromMongooseQuestion(
+                            mongooseQuestion,
+                        );
+                    },
+                );
+                resolve(questions);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
     private setDataFromQuestion(question: Question<any>) {
         return {
             description: question.description,

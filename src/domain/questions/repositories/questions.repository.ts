@@ -10,4 +10,5 @@ export interface QuestionsRepository extends CRUDRepository<Question<any>> {
         limit: number,
         offset: number,
     ): Promise<Question<any>[]>;
+    findByProfessor(professor: Professor);
 }
