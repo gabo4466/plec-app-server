@@ -5,6 +5,7 @@ import { RegisterProfessorDto } from '../dto/register-professor.dto';
 import { Auth } from '../decorators/auth.decorator';
 import { LoginProfessorDto } from '../dto/login-professor.dto';
 import { ProfessorLoginUseCase } from '../../../application/users/professor-login.use-case';
+import { GetUser } from '../decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthUsersController {
@@ -27,9 +28,10 @@ export class AuthUsersController {
         return await this.professorLoginUseCase.execute(professor);
     }
 
-    @Get('/prueba')
+    @Get('')
     @Auth()
-    prueba() {
-        return { no: 'no autorizado' };
+    prueba(@GetUser() professor: Professor) {
+        delete professor.password;
+        return professor;
     }
 }

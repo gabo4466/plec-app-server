@@ -11,6 +11,9 @@ import {
     TagSchema,
 } from '../../infrastructure/tags/data-base-dtos/mongoose/mongoose-tag.dto';
 import { TagsSearchService } from 'src/domain/tags/services/tags-search.service';
+import { TagsFindByTermService } from 'src/domain/tags/services/tags-find-by-term.service';
+import { TagsByUserUseCase } from 'src/application/tags/tags-by-user.use-case';
+import { QuestionsModule } from '../questions/questions.module';
 
 @Module({
     imports: [
@@ -27,6 +30,7 @@ import { TagsSearchService } from 'src/domain/tags/services/tags-search.service'
         // SERVICES
         TagsCreateService,
         TagsSearchService,
+        TagsFindByTermService,
 
         // USE CASES
         TagsCreateUseCase,
@@ -39,6 +43,6 @@ import { TagsSearchService } from 'src/domain/tags/services/tags-search.service'
         },
     ],
     controllers: [TagsController],
-    exports: ['TagRepository'],
+    exports: ['TagRepository', TagsFindByTermService],
 })
 export class TagsModule {}

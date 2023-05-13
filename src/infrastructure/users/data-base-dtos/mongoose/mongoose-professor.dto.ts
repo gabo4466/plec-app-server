@@ -37,27 +37,27 @@ export class MongooseProfessorDto extends Document implements ProfessorInt {
     })
     isActive: boolean;
 
-    @Prop({
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: MongooseProfessorDto.name,
-            },
-        ],
-    })
-    @Type(() => MongooseProfessorDto)
-    followers: MongooseProfessorDto;
+    // @Prop({
+    //     type: [
+    //         {
+    //             type: mongoose.Schema.Types.ObjectId,
+    //             ref: MongooseProfessorDto.name,
+    //         },
+    //     ],
+    // })
+    // @Type(() => MongooseProfessorDto)
+    // followers: MongooseProfessorDto;
 
-    @Prop({
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: MongooseProfessorDto.name,
-            },
-        ],
-    })
-    @Type(() => MongooseProfessorDto)
-    followed: MongooseProfessorDto;
+    // @Prop({
+    //     type: [
+    //         {
+    //             type: mongoose.Schema.Types.ObjectId,
+    //             ref: MongooseProfessorDto.name,
+    //         },
+    //     ],
+    // })
+    // @Type(() => MongooseProfessorDto)
+    // followed: MongooseProfessorDto;
 
     @Prop({
         default: false,

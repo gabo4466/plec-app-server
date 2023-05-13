@@ -5,9 +5,8 @@ import { compareSync, hashSync } from 'bcrypt';
 
 @Injectable()
 export class BCryptService implements CryptService {
-    // TODO: Get Rounds from env variable
     encrypt(term: string): string {
-        return hashSync(term, 10);
+        return hashSync(term, +process.env.SALT_ROUNDS);
     }
     compare(term: string, encrypted: string): boolean {
         return compareSync(term, encrypted);

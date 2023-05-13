@@ -157,98 +157,98 @@ export class MongooseProfessorRepository implements ProfessorRepository {
         });
     }
 
-    follow(mongoId: string, professor: Professor): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            //TODO: implent transaction
-            // const db = await mongoose
-            //     .createConnection(process.env.MONGOURL)
-            //     .asPromise();
-            // const session = await db.startSession();
+    // follow(mongoId: string, professor: Professor): Promise<void> {
+    //     return new Promise(async (resolve, reject) => {
+    //         //TODO: implent transaction
+    //         // const db = await mongoose
+    //         //     .createConnection(process.env.MONGOURL)
+    //         //     .asPromise();
+    //         // const session = await db.startSession();
 
-            //   console.log('pasó');
-            try {
-                if (
-                    !isValidObjectId(mongoId) ||
-                    !isValidObjectId(professor.id.toString())
-                ) {
-                    throw new Error('Invalid ID');
-                }
+    //         //   console.log('pasó');
+    //         try {
+    //             if (
+    //                 !isValidObjectId(mongoId) ||
+    //                 !isValidObjectId(professor.id.toString())
+    //             ) {
+    //                 throw new Error('Invalid ID');
+    //             }
 
-                if (mongoId === professor.id.toString()) {
-                    throw new Error('You cannot follow yourself');
-                }
-                //  await session.startTransaction();
+    //             if (mongoId === professor.id.toString()) {
+    //                 throw new Error('You cannot follow yourself');
+    //             }
+    //             //  await session.startTransaction();
 
-                await this.professorModel.findByIdAndUpdate(
-                    professor.id,
-                    {
-                        $addToSet: { followed: mongoId },
-                    },
-                    { new: true },
-                );
-                // .session(session);
+    //             await this.professorModel.findByIdAndUpdate(
+    //                 professor.id,
+    //                 {
+    //                     $addToSet: { followed: mongoId },
+    //                 },
+    //                 { new: true },
+    //             );
+    //             // .session(session);
 
-                await this.professorModel.findByIdAndUpdate(
-                    mongoId,
-                    {
-                        $addToSet: { followers: professor.id },
-                    },
-                    { new: true },
-                );
-                //  .session(session);
+    //             await this.professorModel.findByIdAndUpdate(
+    //                 mongoId,
+    //                 {
+    //                     $addToSet: { followers: professor.id },
+    //                 },
+    //                 { new: true },
+    //             );
+    //             //  .session(session);
 
-                //   await session.commitTransaction();
-                //  session.endSession();
-                resolve();
-            } catch (error) {
-                // await session.abortTransaction();
-                // session.endSession();
+    //             //   await session.commitTransaction();
+    //             //  session.endSession();
+    //             resolve();
+    //         } catch (error) {
+    //             // await session.abortTransaction();
+    //             // session.endSession();
 
-                //  console.log(error);
-                reject(error);
-            }
-        });
-    }
+    //             //  console.log(error);
+    //             reject(error);
+    //         }
+    //     });
+    // }
 
-    unfollow(mongoId: string, professor: Professor): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                if (
-                    !isValidObjectId(mongoId) ||
-                    !isValidObjectId(professor.id.toString())
-                ) {
-                    console.log('error1');
-                    throw new Error('Invalid ID');
-                }
+    // unfollow(mongoId: string, professor: Professor): Promise<void> {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             if (
+    //                 !isValidObjectId(mongoId) ||
+    //                 !isValidObjectId(professor.id.toString())
+    //             ) {
+    //                 console.log('error1');
+    //                 throw new Error('Invalid ID');
+    //             }
 
-                if (mongoId === professor.id.toString()) {
-                    console.log('error');
-                    throw new Error('You cannot unfollow yourself');
-                }
+    //             if (mongoId === professor.id.toString()) {
+    //                 console.log('error');
+    //                 throw new Error('You cannot unfollow yourself');
+    //             }
 
-                await this.professorModel.findByIdAndUpdate(
-                    professor.id,
+    //             await this.professorModel.findByIdAndUpdate(
+    //                 professor.id,
 
-                    {
-                        $pull: { followed: mongoId },
-                    },
-                    { new: true },
-                );
-                await this.professorModel.findByIdAndUpdate(
-                    mongoId,
-                    {
-                        $pull: { followers: professor.id },
-                    },
-                    { new: true },
-                );
+    //                 {
+    //                     $pull: { followed: mongoId },
+    //                 },
+    //                 { new: true },
+    //             );
+    //             await this.professorModel.findByIdAndUpdate(
+    //                 mongoId,
+    //                 {
+    //                     $pull: { followers: professor.id },
+    //                 },
+    //                 { new: true },
+    //             );
 
-                resolve();
-            } catch (error) {
-                console.log(error);
-                reject(error);
-            }
-        });
-    }
+    //             resolve();
+    //         } catch (error) {
+    //             console.log(error);
+    //             reject(error);
+    //         }
+    //     });
+    // }
 
     activate(id: string): Promise<any> {
         return new Promise(async (resolve, reject) => {

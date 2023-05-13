@@ -29,12 +29,7 @@ export class ProfessorModSearchUseCase {
             if (!professors) {
                 throw new UserException(2);
             }
-            let newProfessors: Professor[] = [];
-            professors.forEach((professor) => {
-                professor.toObject();
-                newProfessors.push(professor);
-            });
-            return newProfessors;
+            return professors;
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();

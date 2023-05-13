@@ -19,7 +19,7 @@ import { ProfessorFollowUseCase } from '../../../application/users/professor-fol
 import { ProfessorProfileUseCase } from 'src/application/users/professor-profile.use-case';
 import { ProfessorUnfollowUseCase } from 'src/application/users/professor-unfollow.use-case';
 
-@Controller('users')
+@Controller('users/professors')
 export class UsersController {
     constructor(
         private readonly professorSearchUseCase: ProfessorSearchUseCase,
