@@ -50,9 +50,9 @@ export class GameWsService {
 
     async registerPlayer(
         client: Socket,
-        payload: { id: string; idGame: string },
+        person: { id: string; idGame: string },
     ) {
-        const player = await this.playerrepository.findOneByTerm(payload.id);
+        const player = await this.playerrepository.findOneByTerm(person.id);
 
         this.checkPlayerConnection(player);
 
@@ -70,11 +70,22 @@ export class GameWsService {
         // console.log(this.connectedClients);
         return Object.keys(this.connectedProfessor);
     }
+    getConnectedPlayers(): string[] {
+        // console.log(this.connectedClients);
+        return Object.keys(this.connectedProfessor);
+    }
 
     getProfessor(): ConnectedProfessor {
         return this.connectedProfessor;
     }
 
+    // getPlayersFullName(players: string[]) {
+    //     let namePlayers: string[];
+    //     for (const player of players) {
+    //         namePlayers.push(player);
+    //     }
+    //     return namePlayers;
+    // }
     getProfessorFullName(socketId: string) {
         return this.connectedProfessor[socketId].professor.name;
     }
@@ -82,6 +93,7 @@ export class GameWsService {
     private checkProfessorConnection(professor: Professor) {
         let exit: boolean = false;
         let clients: string[] = Object.keys(this.connectedProfessor);
+        console.log(clients);
         let counter = 0;
         while (!exit && counter < clients.length) {
             const connectedClient = this.connectedProfessor[clients[counter]];
@@ -101,6 +113,7 @@ export class GameWsService {
         let clients: string[] = Object.keys(this.connectedPlayer);
         let counter = 0;
         while (!exit && counter < clients.length) {
+            console.log('paso');
             const connectedPlayer = this.connectedPlayer[clients[counter]];
             if (connectedPlayer.player.id.toString() === player.id.toString()) {
                 connectedPlayer.socket.disconnect();

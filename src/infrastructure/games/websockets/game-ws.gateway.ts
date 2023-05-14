@@ -28,35 +28,41 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         };
 
         let payload: JwtPayload;
-        if (token) {
+        if (token != null) {
             try {
                 payload = this.jtwService.verify(token);
                 await this.gameWsService.registerProfessor(
                     client,
                     payload.id_user,
                 );
+
+                this.wss.emit(
+                    'clients-updated',
+                    this.gameWsService.getProfessorFullName(client.id),
+                );
             } catch (error) {
-                client.disconnect;
+                client.disconnect();
                 return;
             }
-        } else if (player) {
+        } else if (player.id != null && player.idGame != null) {
             try {
                 await this.gameWsService.registerPlayer(client, player);
+
+                this.wss.emit(
+                    'clients-updated',
+                    this.gameWsService.getConnectedPlayers(),
+                );
             } catch (error) {
-                client.disconnect;
+                client.disconnect();
                 return;
             }
         } else {
-            client.disconnect;
+            client.disconnect();
             return;
         }
 
         console.log(payload);
         console.log(client.id);
-
-        this.wss.emit('clients-updated', {
-            clients: this.gameWsService.getConnectedProfessor(),
-        });
     }
 
     handleDisconnect(client: Socket) {
