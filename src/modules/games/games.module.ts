@@ -7,6 +7,9 @@ import {
     GameSchema,
     MongooseGameDto,
 } from '../../infrastructure/games/data-base-dtos/mongoose/mongoose-game.dto';
+import { GameWsGateway } from 'src/infrastructure/games/websockets/game-ws.gateway';
+import { GameWsService } from 'src/infrastructure/games/websockets/game-ws.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
     controllers: [],
@@ -18,6 +21,7 @@ import {
                 collection: 'games',
             },
         ]),
+        UsersModule,
     ],
     providers: [
         // Services
@@ -25,7 +29,9 @@ import {
 
         // UseCases
         GameCreateUseCase,
-
+        //Websockets
+        GameWsService,
+        GameWsGateway,
         // Repositories
         {
             provide: 'GameRepository',
