@@ -58,24 +58,25 @@ export class GameWsService {
             throw new WebSocketException('Player not found');
         }
         this.checkPlayerConnection(player);
-
         this.connectedPlayer[client.id] = {
             socket: client,
             player: player,
         };
     }
 
-    removeClient(clientId: string) {
+    removeProfessor(clientId: string) {
         delete this.connectedProfessor[clientId];
     }
 
+    removePlayer(clientId: string) {
+        delete this.connectedPlayer[clientId];
+    }
+
     getConnectedProfessor(): string[] {
-        // console.log(this.connectedClients);
         return Object.keys(this.connectedProfessor);
     }
     getConnectedPlayers(): string[] {
-        // console.log(this.connectedClients);
-        return Object.keys(this.connectedProfessor);
+        return Object.keys(this.connectedPlayer);
     }
 
     getProfessor(): ConnectedProfessor {
@@ -95,7 +96,7 @@ export class GameWsService {
 
     private checkProfessorConnection(professor: Professor) {
         let exit: boolean = false;
-        let clients: string[] = Object.keys(this.connectedProfessor);
+        let clients: string[] = this.getConnectedProfessor();
         let counter = 0;
         while (!exit && counter < clients.length) {
             const connectedProfessor =
@@ -113,13 +114,15 @@ export class GameWsService {
 
     checkPlayerConnection(player: Player) {
         let exit: boolean = false;
-        let clients: string[] = Object.keys(this.connectedPlayer);
+        let clients: string[] = this.getConnectedPlayers();
         let counter = 0;
         while (!exit && counter < clients.length) {
             const connectedPlayer = this.connectedPlayer[clients[counter]];
 
-            if (connectedPlayer.player.id.toString() === player.id.toString()) {
+            if (connectedPlayer.player.id === player.id.toString()) {
                 connectedPlayer.socket.disconnect();
+
+                // connectedPlayer.socket.disconnect();
                 exit = true;
             }
             counter++;
