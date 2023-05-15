@@ -24,7 +24,7 @@ export class GameWsService {
         private readonly professorRepository: ProfessorRepository,
 
         @Inject('PlayerRepository')
-        private readonly playerrepository: PlayerRepository,
+        private readonly playerRepository: PlayerRepository,
     ) {}
 
     async registerProfessor(client: Socket, personId: string) {
@@ -52,8 +52,11 @@ export class GameWsService {
         client: Socket,
         person: { id: string; idGame: string },
     ) {
-        const player = await this.playerrepository.findOneByTerm(person.id);
+        const player = await this.playerRepository.findOneByTerm(person.id);
 
+        if (!player) {
+            throw new WebSocketException('Player not found');
+        }
         this.checkPlayerConnection(player);
 
         this.connectedPlayer[client.id] = {
@@ -79,29 +82,29 @@ export class GameWsService {
         return this.connectedProfessor;
     }
 
-    // getPlayersFullName(players: string[]) {
-    //     let namePlayers: string[];
-    //     for (const player of players) {
-    //         namePlayers.push(player);
-    //     }
-    //     return namePlayers;
-    // }
-    getProfessorFullName(socketId: string) {
-        return this.connectedProfessor[socketId].professor.name;
+    getPlayersFullName() {
+        return Object.values(this.connectedPlayer).map((player) => {
+            return player.player.nickname;
+        });
+    }
+    getProfessorFullName() {
+        return Object.values(this.connectedProfessor).map((professor) => {
+            return professor.professor.name;
+        });
     }
 
     private checkProfessorConnection(professor: Professor) {
         let exit: boolean = false;
         let clients: string[] = Object.keys(this.connectedProfessor);
-        console.log(clients);
         let counter = 0;
         while (!exit && counter < clients.length) {
-            const connectedClient = this.connectedProfessor[clients[counter]];
+            const connectedProfessor =
+                this.connectedProfessor[clients[counter]];
             if (
-                connectedClient.professor.id.toString() ===
+                connectedProfessor.professor.id.toString() ===
                 professor.id.toString()
             ) {
-                connectedClient.socket.disconnect();
+                connectedProfessor.socket.disconnect();
                 exit = true;
             }
             counter++;
@@ -113,8 +116,8 @@ export class GameWsService {
         let clients: string[] = Object.keys(this.connectedPlayer);
         let counter = 0;
         while (!exit && counter < clients.length) {
-            console.log('paso');
             const connectedPlayer = this.connectedPlayer[clients[counter]];
+
             if (connectedPlayer.player.id.toString() === player.id.toString()) {
                 connectedPlayer.socket.disconnect();
                 exit = true;
