@@ -5,12 +5,25 @@ import { Professor } from '../../../domain/users/professor';
 import { Player } from 'src/domain/users/player';
 import { ProfessorRepository } from 'src/domain/users/repositories/professor.repository';
 import { PlayerRepository } from 'src/domain/users/repositories/player.repository';
+import Question from 'src/domain/questions/question';
+import { QuestionsFindByIdService } from 'src/domain/questions/services/questions-find-by-id.service';
+import { Tag } from 'src/domain/tags/tag';
+import { TagsFindByTermService } from 'src/domain/tags/services/tags-find-by-term.service';
+import { SimpleSelectionQuestion } from 'src/domain/questions/simple-selection-question';
 
 interface ConnectedProfessor {
     [id: string]: { socket: Socket; professor: Professor };
 }
 interface ConnectedPlayer {
     [id: string]: { socket: Socket; player: Player };
+}
+interface Games {
+    [id: string]: {
+        professor: Professor;
+        player: Player[];
+        questions: Question<any>[];
+        tags: Tag[];
+    };
 }
 
 @Injectable()
@@ -19,12 +32,18 @@ export class GameWsService {
 
     private connectedPlayer: ConnectedPlayer = {};
 
+    private games: Games = {};
+
     constructor(
         @Inject('ProfessorRepository')
         private readonly professorRepository: ProfessorRepository,
 
         @Inject('PlayerRepository')
         private readonly playerRepository: PlayerRepository,
+
+        private readonly questionsFindByIdService: QuestionsFindByIdService,
+
+        private readonly tagFindByTermService: TagsFindByTermService,
     ) {}
 
     async registerProfessor(client: Socket, personId: string) {
@@ -63,7 +82,41 @@ export class GameWsService {
             player: player,
         };
     }
+    generateId(): string {
+        return Math.random().toString(36).substring(4, 8);
+    }
+    createGame(professorId: string, questionsIds: string[], tagIds: string[]) {
+        const professor = this.connectedProfessor[professorId].professor;
+        const gameId = this.generateId();
+        const questions = [];
+        questionsIds.forEach(async (questionId) => {
+            const question = await this.questionsFindByIdService.execute(
+                questionId,
+            );
+            questions.push(question ? question : new SimpleSelectionQuestion());
+        });
 
+        const tags: Tag[] = [];
+
+        tagIds.forEach(async (tagId) => {
+            const tag = await this.tagFindByTermService.execute(tagId);
+
+            tags.push(tag ? tag : new Tag());
+        });
+
+        this.games[gameId] = {
+            professor: professor,
+            player: [],
+            questions: questions,
+            tags: tags,
+        };
+        return gameId;
+    }
+    addPlayerToGame(client: Socket, player: { id: string; idGame: string }) {
+        const game = this.games[player.idGame];
+        const playerToAdd = this.connectedPlayer[client.id].player;
+        game.player.push(playerToAdd);
+    }
     removeProfessor(clientId: string) {
         delete this.connectedProfessor[clientId];
     }
@@ -72,6 +125,9 @@ export class GameWsService {
         delete this.connectedPlayer[clientId];
     }
 
+    getGames(): string[] {
+        return Object.keys(this.games);
+    }
     getConnectedProfessor(): string[] {
         return Object.keys(this.connectedProfessor);
     }

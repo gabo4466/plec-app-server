@@ -10,6 +10,10 @@ import {
 import { GameWsGateway } from 'src/infrastructure/games/websockets/game-ws.gateway';
 import { GameWsService } from 'src/infrastructure/games/websockets/game-ws.service';
 import { UsersModule } from '../users/users.module';
+import { QuestionFindByIdUseCase } from 'src/application/questions/question-find-by-id.use-case';
+import { QuestionsFindByIdService } from 'src/domain/questions/services/questions-find-by-id.service';
+import { QuestionsModule } from '../questions/questions.module';
+import { TagsModule } from '../tags/tags.module';
 
 @Module({
     controllers: [],
@@ -22,13 +26,15 @@ import { UsersModule } from '../users/users.module';
             },
         ]),
         UsersModule,
+        QuestionsModule,
+        TagsModule,
     ],
     providers: [
         // Services
-        GameCreateService,
-
+        // GameCreateService,
+        QuestionsFindByIdService,
         // UseCases
-        GameCreateUseCase,
+        // GameCreateUseCase,
         //Websockets
         GameWsService,
         GameWsGateway,

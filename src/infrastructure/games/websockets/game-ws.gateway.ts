@@ -9,8 +9,7 @@ import { GameWsService } from './game-ws.service';
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/domain/users/interfaces/jwt-payload.interface';
-import { WebSocketException } from './websocket-exception';
-import { StartGameDto } from '../dto/start-game.dto';
+import { CreateGameDto } from '../dto/create-game.dto';
 
 @WebSocketGateway({ cors: true })
 export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -40,7 +39,7 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             client.disconnect();
             return;
         }
-        if (token != null && token.length > 0) {
+        if (token && token.length > 0) {
             try {
                 payload = this.jtwService.verify(token);
                 await this.gameWsService.registerProfessor(
@@ -58,9 +57,9 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 return;
             }
         } else if (
-            player.id != null &&
+            player.id &&
             player.id.length > 0 &&
-            player.idGame != null &&
+            player.idGame &&
             player.idGame.length > 0
         ) {
             try {
@@ -98,10 +97,48 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             );
         }
     }
-    generateId = () => Math.random().toString(36).substring(4, 8);
 
-    @SubscribeMessage('message-from-client')
-    onMessageFromClient(client: Socket, payload: StartGameDto) {
-        client.emit('idGame', { idGame: this.generateId() });
+    @SubscribeMessage('message-from-professor')
+    onProfessorCreateGame(client: Socket, payload: CreateGameDto) {
+        const { questionsIds = [], tag = [] } = payload;
+
+        const idGame = this.gameWsService.createGame(
+            client.id,
+            questionsIds,
+            tag,
+        );
+
+        client.emit('idGame', { idGame: idGame });
+
+        const professorsNamespace = this.wss.of('/orders');
+
+        professorsNamespace.on('connection', (socket) => {
+            socket.join(idGame);
+            professorsNamespace.to(idGame).emit('hello');
+        });
+    }
+
+    @SubscribeMessage('message-from-players')
+    onPlayerJoinGame(client: Socket) {
+        const player = {
+            id: client.handshake.headers.idplayer as string,
+            idGame: client.handshake.headers.idgame as string,
+        };
+        const games = this.gameWsService.getGames();
+
+        const userNamespace = this.wss.of('/users');
+
+        if (games.includes(player.idGame)) {
+            this.gameWsService.addPlayerToGame(client, player);
+            userNamespace.on('connection', (socket) => {
+                socket.join(player.idGame);
+                this.wss.emit(
+                    'connected',
+                    'connected' + player.id + ' ' + player.idGame,
+                );
+            });
+        } else {
+            client.disconnect();
+        }
     }
 }
