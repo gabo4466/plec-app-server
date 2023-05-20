@@ -22,19 +22,15 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     async handleConnection(client: Socket) {
         const token = client.handshake.headers.authentication as string;
-        const player = {
-            id: client.handshake.headers.idplayer as string,
-            idGame: client.handshake.headers.idgame as string,
-        };
+        const playerId = client.handshake.headers.idplayer as string;
+
         let payload: JwtPayload;
 
         if (
             token != null &&
             token.length > 0 &&
-            player.id != null &&
-            player.id.length > 0 &&
-            player.idGame != null &&
-            player.idGame.length > 0
+            playerId != null &&
+            playerId.length > 0
         ) {
             client.disconnect();
             return;
@@ -56,19 +52,14 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 client.disconnect();
                 return;
             }
-        } else if (
-            player.id &&
-            player.id.length > 0 &&
-            player.idGame &&
-            player.idGame.length > 0
-        ) {
+        } else if (playerId && playerId.length > 0) {
             try {
-                await this.gameWsService.registerPlayer(client, player);
+                await this.gameWsService.registerPlayer(client, playerId);
 
-                this.wss.emit(
-                    'players-updated',
-                    this.gameWsService.getPlayersFullName(),
-                );
+                // this.wss.emit(
+                //     'players-updated',
+                //     this.gameWsService.getPlayersFullName(),
+                // );
             } catch (error) {
                 client.disconnect();
                 return;
@@ -114,29 +105,36 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         professorsNamespace.on('connection', (socket) => {
             socket.join(idGame);
-            professorsNamespace.to(idGame).emit('hello');
+            professorsNamespace.to(idGame).emit('connected', client.id);
         });
     }
 
     @SubscribeMessage('message-from-players')
-    onPlayerJoinGame(client: Socket) {
-        const player = {
-            id: client.handshake.headers.idplayer as string,
-            idGame: client.handshake.headers.idgame as string,
-        };
+    onPlayerJoinGame(client: Socket, idGame: string) {
+        console.log(idGame);
+        if (!idGame || idGame.length < 1) {
+            client.disconnect();
+            return;
+        }
+
         const games = this.gameWsService.getGames();
 
         const userNamespace = this.wss.of('/users');
 
-        if (games.includes(player.idGame)) {
-            this.gameWsService.addPlayerToGame(client, player);
+        if (games.includes(idGame)) {
+            this.gameWsService.addPlayerToGame(client, idGame);
             userNamespace.on('connection', (socket) => {
-                socket.join(player.idGame);
+                socket.join(idGame);
                 this.wss.emit(
                     'connected',
-                    'connected' + player.id + ' ' + player.idGame,
+                    'connected' + client.id + ' ' + idGame,
                 );
             });
+
+            this.wss.emit(
+                'players-updated',
+                this.gameWsService.getPlayersFullNameGame(idGame),
+            );
         } else {
             client.disconnect();
         }

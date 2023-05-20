@@ -67,11 +67,8 @@ export class GameWsService {
         };
     }
 
-    async registerPlayer(
-        client: Socket,
-        person: { id: string; idGame: string },
-    ) {
-        const player = await this.playerRepository.findOneByTerm(person.id);
+    async registerPlayer(client: Socket, personId: string) {
+        const player = await this.playerRepository.findOneByTerm(personId);
 
         if (!player) {
             throw new WebSocketException('Player not found');
@@ -87,6 +84,7 @@ export class GameWsService {
     }
     createGame(professorId: string, questionsIds: string[], tagIds: string[]) {
         const professor = this.connectedProfessor[professorId].professor;
+        console.log(professor);
         const gameId = this.generateId();
         const questions = [];
         questionsIds.forEach(async (questionId) => {
@@ -112,11 +110,17 @@ export class GameWsService {
         };
         return gameId;
     }
-    addPlayerToGame(client: Socket, player: { id: string; idGame: string }) {
-        const game = this.games[player.idGame];
+    addPlayerToGame(client: Socket, idGame: string) {
+        const game = this.games[idGame];
         const playerToAdd = this.connectedPlayer[client.id].player;
+        console.log(playerToAdd);
+        if (game.player.includes(playerToAdd)) {
+            return;
+        }
+
         game.player.push(playerToAdd);
     }
+
     removeProfessor(clientId: string) {
         delete this.connectedProfessor[clientId];
     }
@@ -142,6 +146,13 @@ export class GameWsService {
     getPlayersFullName() {
         return Object.values(this.connectedPlayer).map((player) => {
             return player.player.nickname;
+        });
+    }
+
+    getPlayersFullNameGame(idGame: string): any {
+        const game = this.games[idGame];
+        return game.player.map((player) => {
+            return player.nickname;
         });
     }
     getProfessorFullName() {
