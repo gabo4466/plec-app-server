@@ -90,10 +90,10 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('message-from-professor')
-    onProfessorCreateGame(client: Socket, payload: CreateGameDto) {
+    async onProfessorCreateGame(client: Socket, payload: CreateGameDto) {
         const { questionsIds = [], tag = [] } = payload;
 
-        const idGame = this.gameWsService.createGame(
+        const idGame = await this.gameWsService.createGame(
             client.id,
             questionsIds,
             tag,
@@ -104,8 +104,8 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const professorsNamespace = this.wss.of('/orders');
 
         professorsNamespace.on('connection', (socket) => {
-            socket.join(idGame);
-            professorsNamespace.to(idGame).emit('connected', client.id);
+            socket.join('/' + idGame);
+            professorsNamespace.to('/' + idGame).emit('hola', client.id);
         });
     }
 
@@ -124,11 +124,10 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         if (games.includes(idGame)) {
             this.gameWsService.addPlayerToGame(client, idGame);
             userNamespace.on('connection', (socket) => {
-                socket.join(idGame);
-                this.wss.emit(
-                    'connected',
-                    'connected' + client.id + ' ' + idGame,
-                );
+                socket.join('/' + idGame);
+                userNamespace
+                    .to('/' + idGame)
+                    .emit('hola', 'connected' + client.id + ' ' + idGame);
             });
 
             this.wss.emit(
@@ -138,5 +137,23 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         } else {
             client.disconnect();
         }
+    }
+
+    @SubscribeMessage('startGame')
+    onGameStart(client: Socket, idGame: string) {
+        if (!idGame || idGame.length < 1) {
+            client.disconnect();
+            return;
+        }
+        const game = this.gameWsService.getGameId(idGame);
+        console.log(game.questions[0]);
+        this.wss.emit('question', { question: game.questions[0], index: 0 });
+    }
+
+    @SubscribeMessage('nextQuestion')
+    onNextQuestion(client: Socket, currentQuestion: number) {
+        const game = this.gameWsService.getGameSocketId(client.id);
+        const question = game.questions[currentQuestion + 1];
+        client.emit('question', question);
     }
 }

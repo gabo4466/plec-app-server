@@ -82,7 +82,11 @@ export class GameWsService {
     generateId(): string {
         return Math.random().toString(36).substring(4, 8);
     }
-    createGame(professorId: string, questionsIds: string[], tagIds: string[]) {
+    async createGame(
+        professorId: string,
+        questionsIds: string[],
+        tagIds: string[],
+    ) {
         const professor = this.connectedProfessor[professorId].professor;
         console.log(professor);
         const gameId = this.generateId();
@@ -129,6 +133,16 @@ export class GameWsService {
         delete this.connectedPlayer[clientId];
     }
 
+    getGameId(idGame: string) {
+        return this.games[idGame];
+    }
+    getGameSocketId(clientId: string) {
+        return Object.values(this.games).find((game) => {
+            return game.player.find((player) => {
+                return player.id === clientId;
+            });
+        });
+    }
     getGames(): string[] {
         return Object.keys(this.games);
     }
