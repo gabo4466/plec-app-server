@@ -139,19 +139,17 @@ export class GameWsService {
     getGameBySocketPlayerId(clientId: string) {
         const player = this.connectedPlayer[clientId].player;
 
-        return Object.values(this.games).find((game) => {
-            return game.player.find((playerGame) => {
-                return playerGame.id === player.id;
-            });
-        });
+        return Object.values(this.games).find((game) =>
+            game.player.find((playerGame) => playerGame.id === player.id),
+        );
     }
 
     async getGameBySocketProfessorId(clientId: string) {
         const professor = this.connectedProfessor[clientId].professor;
 
-        return Object.values(this.games).find((game) => {
-            return game.professor.id.toString() === professor.id.toString();
-        });
+        return Object.values(this.games).find(
+            (game) => game.professor.id.toString() === professor.id.toString(),
+        );
     }
     getGames(): string[] {
         return Object.keys(this.games);
