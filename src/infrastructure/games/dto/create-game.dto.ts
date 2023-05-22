@@ -16,5 +16,5 @@ export class CreateGameDto {
     @IsArray({
         each: true,
     })
-    tag: string[];
+    tags: string[];
 }

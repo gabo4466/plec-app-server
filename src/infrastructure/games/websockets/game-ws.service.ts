@@ -91,13 +91,13 @@ export class GameWsService {
         console.log(professor);
         const gameId = this.generateId();
         const questions = [];
-        questionsIds.forEach(async (questionId) => {
+        console.log(questionsIds);
+        await questionsIds.forEach(async (questionId) => {
             const question = await this.questionsFindByIdService.execute(
                 questionId,
             );
             questions.push(question ? question : new SimpleSelectionQuestion());
         });
-
         const tags: Tag[] = [];
 
         tagIds.forEach(async (tagId) => {
@@ -136,11 +136,21 @@ export class GameWsService {
     getGameId(idGame: string) {
         return this.games[idGame];
     }
-    getGameSocketId(clientId: string) {
+    getGameBySocketPlayerId(clientId: string) {
+        const player = this.connectedPlayer[clientId].player;
+
         return Object.values(this.games).find((game) => {
-            return game.player.find((player) => {
-                return player.id === clientId;
+            return game.player.find((playerGame) => {
+                return playerGame.id === player.id;
             });
+        });
+    }
+
+    async getGameBySocketProfessorId(clientId: string) {
+        const professor = this.connectedProfessor[clientId].professor;
+
+        return Object.values(this.games).find((game) => {
+            return game.professor.id.toString() === professor.id.toString();
         });
     }
     getGames(): string[] {

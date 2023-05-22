@@ -91,12 +91,12 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('message-from-professor')
     async onProfessorCreateGame(client: Socket, payload: CreateGameDto) {
-        const { questionsIds = [], tag = [] } = payload;
-
+        const { questionsIds = [], tags = [] } = payload;
+        console.log(questionsIds);
         const idGame = await this.gameWsService.createGame(
             client.id,
             questionsIds,
-            tag,
+            tags,
         );
 
         client.emit('idGame', { idGame: idGame });
@@ -140,20 +140,24 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage('startGame')
-    onGameStart(client: Socket, idGame: string) {
-        if (!idGame || idGame.length < 1) {
-            client.disconnect();
-            return;
-        }
-        const game = this.gameWsService.getGameId(idGame);
-        console.log(game.questions[0]);
+    async onGameStart(client: Socket) {
+        const game = await this.gameWsService.getGameBySocketProfessorId(
+            client.id,
+        );
         this.wss.emit('question', { question: game.questions[0], index: 0 });
     }
 
     @SubscribeMessage('nextQuestion')
     onNextQuestion(client: Socket, currentQuestion: number) {
-        const game = this.gameWsService.getGameSocketId(client.id);
-        const question = game.questions[currentQuestion + 1];
-        client.emit('question', question);
+        const game = this.gameWsService.getGameBySocketPlayerId(client.id);
+        if (game.questions[currentQuestion + 1] != null) {
+            const question = game.questions[currentQuestion + 1];
+            client.emit('question', {
+                question: question,
+                index: currentQuestion + 1,
+            });
+        } else {
+            client.emit('endGame');
+        }
     }
 }
