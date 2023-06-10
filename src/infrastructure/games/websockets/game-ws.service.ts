@@ -51,6 +51,26 @@ export class GameWsService {
         private readonly tagFindByTermService: TagsFindByTermService,
     ) {}
 
+    removePlayerFromGames(socketId: string) {
+        // delete player from games
+        Object.keys(this.games).forEach((gameId) => {
+            this.games[gameId];
+            for (
+                let index = 0;
+                index < this.games[gameId].player.length;
+                index++
+            ) {
+                const element = this.games[gameId].player[index];
+                if (
+                    element.id.toString() ===
+                    this.connectedPlayer[socketId].player.id.toString()
+                ) {
+                    this.games[gameId].player.splice(index, 1);
+                }
+            }
+        });
+    }
+
     async registerProfessor(client: Socket, personId: string) {
         const professor = await this.professorRepository.findOneByTerm(
             personId,
@@ -106,13 +126,10 @@ export class GameWsService {
             questions.push(question ? question : new SimpleSelectionQuestion());
         });
         const tags: Tag[] = [];
-
         tagIds.forEach(async (tagId) => {
             const tag = await this.tagFindByTermService.execute(tagId);
-
             tags.push(tag ? tag : new Tag());
         });
-
         this.games[gameId] = {
             professor: professor,
             player: [],

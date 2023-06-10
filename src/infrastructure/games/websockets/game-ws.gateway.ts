@@ -56,11 +56,6 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         } else if (playerId && playerId.length > 0) {
             try {
                 await this.gameWsService.registerPlayer(client, playerId);
-
-                // this.wss.emit(
-                //     'players-updated',
-                //     this.gameWsService.getPlayersFullName(),
-                // );
             } catch (error) {
                 client.disconnect();
                 return;
@@ -81,11 +76,12 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 this.gameWsService.getConnectedProfessors(),
             );
         } else {
+            this.gameWsService.removePlayerFromGames(client.id);
             this.gameWsService.removePlayer(client.id);
 
             this.wss.emit(
                 'players-updated',
-                this.gameWsService.getConnectedPlayers(),
+                this.gameWsService.getPlayersFullName(),
             );
         }
     }
