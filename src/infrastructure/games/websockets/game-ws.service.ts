@@ -199,7 +199,7 @@ export class GameWsService {
     getProfessor(): ConnectedProfessor {
         return this.connectedProfessor;
     }
-    getPlayers(): any {
+    getPlayers(): any[] {
         return Object.values(this.connectedPlayer).map((player) => {
             return {
                 player: player['player'],

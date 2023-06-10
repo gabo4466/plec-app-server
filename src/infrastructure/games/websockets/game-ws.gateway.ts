@@ -150,25 +150,32 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('nextQuestion')
     onNextQuestion(client: Socket, answers: string[]) {
+        console.log(client.id);
         const game = this.gameWsService.getGameBySocketPlayerId(client.id);
         const professor = this.gameWsService.getProfessorById(
             game.professor.id,
         );
+        const players = this.gameWsService.getPlayers();
         const player = this.gameWsService.getPlayerBySocketId(client.id);
-        console.log(this.gameWsService.getPlayers());
-        for (let i = 0; i < game.questions[player.index].answers.length; i++) {
-            for (let j = 0; j < answers.length; j++) {
-                if (
-                    game.questions[player.index].answers[i].text === answers[j]
-                ) {
-                    if (game.questions[player.index].answers[i].val === 1) {
-                        player.points += 50;
+
+        if (player.index + 1 < game.questions.length) {
+            for (
+                let i = 0;
+                i < game.questions[player.index].answers.length;
+                i++
+            ) {
+                for (let j = 0; j < answers.length; j++) {
+                    if (
+                        game.questions[player.index].answers[i].text ===
+                        answers[j]
+                    ) {
+                        if (game.questions[player.index].answers[i].val === 1) {
+                            player.points += 50;
+                        }
                     }
                 }
             }
-        }
 
-        if (game.questions[player.index + 1] != null) {
             player.index = player.index + 1;
             const question = game.questions[player.index + 1];
             client.emit('question', {
@@ -176,10 +183,25 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             });
         } else {
             client.emit('endQuestions');
+
+            let allFinished = true;
+            let counter = 0;
+
+            while (allFinished && counter < players.length) {
+                if (players[counter].index < game.questions.length - 1) {
+                    console.log('es falso');
+                    allFinished = false;
+                }
+                counter++;
+            }
+
+            if (allFinished) {
+                this.wss.emit('endGame', 'fin de partida');
+            }
         }
 
         this.wss.to(professor).emit('gameStatus', {
-            status: this.gameWsService.getPlayers(),
+            status: players,
         });
     }
 }
