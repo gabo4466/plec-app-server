@@ -10,6 +10,7 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from 'src/domain/users/interfaces/jwt-payload.interface';
 import { CreateGameDto } from '../dto/create-game.dto';
+import { Answer } from 'src/domain/questions/answer';
 
 @WebSocketGateway({ cors: true })
 export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -77,7 +78,7 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.gameWsService.removeProfessor(client.id);
             this.wss.emit(
                 'professors-updated',
-                this.gameWsService.getConnectedProfessor(),
+                this.gameWsService.getConnectedProfessors(),
             );
         } else {
             this.gameWsService.removePlayer(client.id);
@@ -145,19 +146,44 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             client.id,
         );
         this.wss.emit('question', { question: game.questions[0], index: 0 });
+
+        this.wss.to(client.id).emit('gameStatus', {
+            status: this.gameWsService.getPlayers(),
+        });
     }
 
     @SubscribeMessage('nextQuestion')
-    onNextQuestion(client: Socket, currentQuestion: number) {
+    onNextQuestion(client: Socket, answers: string[]) {
         const game = this.gameWsService.getGameBySocketPlayerId(client.id);
-        if (game.questions[currentQuestion + 1] != null) {
-            const question = game.questions[currentQuestion + 1];
+        const professor = this.gameWsService.getProfessorById(
+            game.professor.id,
+        );
+        const player = this.gameWsService.getPlayerBySocketId(client.id);
+        console.log(this.gameWsService.getPlayers());
+        for (let i = 0; i < game.questions[player.index].answers.length; i++) {
+            for (let j = 0; j < answers.length; j++) {
+                if (
+                    game.questions[player.index].answers[i].text === answers[j]
+                ) {
+                    if (game.questions[player.index].answers[i].val === 1) {
+                        player.points += 50;
+                    }
+                }
+            }
+        }
+
+        if (game.questions[player.index + 1] != null) {
+            player.index = player.index + 1;
+            const question = game.questions[player.index + 1];
             client.emit('question', {
                 question: question,
-                index: currentQuestion + 1,
             });
         } else {
-            client.emit('endGame');
+            client.emit('endQuestions');
         }
+
+        this.wss.to(professor).emit('gameStatus', {
+            status: this.gameWsService.getPlayers(),
+        });
     }
 }

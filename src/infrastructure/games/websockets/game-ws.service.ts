@@ -15,7 +15,12 @@ interface ConnectedProfessor {
     [id: string]: { socket: Socket; professor: Professor };
 }
 interface ConnectedPlayer {
-    [id: string]: { socket: Socket; player: Player };
+    [id: string]: {
+        socket: Socket;
+        player: Player;
+        points: number;
+        index: number;
+    };
 }
 interface Games {
     [id: string]: {
@@ -77,6 +82,8 @@ export class GameWsService {
         this.connectedPlayer[client.id] = {
             socket: client,
             player: player,
+            points: 0,
+            index: 0,
         };
     }
     generateId(): string {
@@ -154,15 +161,35 @@ export class GameWsService {
     getGames(): string[] {
         return Object.keys(this.games);
     }
-    getConnectedProfessor(): string[] {
+    getConnectedProfessors(): string[] {
         return Object.keys(this.connectedProfessor);
     }
     getConnectedPlayers(): string[] {
         return Object.keys(this.connectedPlayer);
     }
 
+    getProfessorById(id: string) {
+        return Object.keys(this.connectedProfessor).find(
+            (professor) =>
+                this.connectedProfessor[professor].professor.id === id,
+        );
+    }
+
+    getPlayerBySocketId(id: string) {
+        return this.connectedPlayer[id];
+    }
+
     getProfessor(): ConnectedProfessor {
         return this.connectedProfessor;
+    }
+    getPlayers(): any {
+        return Object.values(this.connectedPlayer).map((player) => {
+            return {
+                player: player['player'],
+                points: player['points'],
+                index: player['index'],
+            };
+        });
     }
 
     getPlayersFullName() {
@@ -185,7 +212,7 @@ export class GameWsService {
 
     private checkProfessorConnection(professor: Professor) {
         let exit: boolean = false;
-        let clients: string[] = this.getConnectedProfessor();
+        let clients: string[] = this.getConnectedProfessors();
         let counter = 0;
         while (!exit && counter < clients.length) {
             const connectedProfessor =
