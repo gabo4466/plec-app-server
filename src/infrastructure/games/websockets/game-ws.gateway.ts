@@ -131,6 +131,9 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 'players-updated',
                 this.gameWsService.getPlayersFullNameGame(idGame),
             );
+            this.wss
+                .to(client.id)
+                .emit('gameStatus', this.gameWsService.getPlayers());
         } else {
             client.disconnect();
         }
@@ -143,9 +146,9 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
         this.wss.emit('question', { question: game.questions[0], index: 0 });
 
-        this.wss.to(client.id).emit('gameStatus', {
-            status: this.gameWsService.getPlayers(),
-        });
+        this.wss
+            .to(client.id)
+            .emit('gameStatus', this.gameWsService.getPlayers());
     }
 
     @SubscribeMessage('nextQuestion')
@@ -200,8 +203,8 @@ export class GameWsGateway implements OnGatewayConnection, OnGatewayDisconnect {
             }
         }
 
-        this.wss.to(professor).emit('gameStatus', {
-            status: players,
-        });
+        this.wss
+            .to(professor)
+            .emit('gameStatus', this.gameWsService.getPlayers());
     }
 }
