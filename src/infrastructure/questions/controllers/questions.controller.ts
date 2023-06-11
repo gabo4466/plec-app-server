@@ -109,8 +109,11 @@ export class QuestionsController {
         professor: Professor,
     ) {
         const { tagsIds } = createQuestionDto;
+        const tagsIdsa = tagsIds.map((tagId) => tagId.toString());
+        console.log(tagsIdsa);
+
         question.setDataFromInt(createQuestionDto);
         question.professor = professor;
-        return await this.questionCreateUseCase.execute(question, tagsIds);
+        return await this.questionCreateUseCase.execute(question, tagsIdsa);
     }
 }
