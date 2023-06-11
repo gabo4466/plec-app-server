@@ -13,8 +13,8 @@ export class ProfessorCheckService {
      * Checks if email is already registered
      * @param professor
      * @returns
-     * false: email doesnt exist in database
-     * true email exists
+     * Professor in case it exists
+     * void in case it doesn't
      */
     async execute(term: string) {
         return this.professorRepository

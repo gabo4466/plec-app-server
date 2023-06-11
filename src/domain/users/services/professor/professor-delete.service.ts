@@ -11,8 +11,8 @@ export class ProfessorDeleteService {
     async execute(id: string) {
         return this.professorRepository
             .delete(id)
-            .then((professor) => {
-                return professor;
+            .then((id) => {
+                return id;
             })
             .catch((error) => {
                 throw error;

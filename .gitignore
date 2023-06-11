@@ -37,3 +37,4 @@ lerna-debug.log*
 
 # Sensible data
 .env
+plec-app-firebase-admin.json

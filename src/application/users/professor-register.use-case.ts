@@ -3,11 +3,11 @@ import {
     Injectable,
     InternalServerErrorException,
 } from '@nestjs/common';
-import { Professor } from '../../domain/users/professor';
-import { ProfessorCreateService } from '../../domain/users/services/professor/professor-create.service';
-import { ProfessorCheckService } from '../../domain/users/services/professor/professor-check.service';
-import { UserException } from '../../domain/users/exceptions/user.exception';
-import { CryptService } from '../../domain/common/services/crypt.service';
+import { Professor } from 'src/domain/users/professor';
+import { ProfessorCreateService } from 'src/domain/users/services/professor/professor-create.service';
+import { ProfessorCheckService } from 'src/domain/users/services/professor/professor-check.service';
+import { UserException } from 'src/domain/users/exceptions/user.exception';
+import { CryptService } from 'src/domain/common/services/crypt.service';
 
 @Injectable()
 export class ProfessorRegisterUseCase {
@@ -29,7 +29,8 @@ export class ProfessorRegisterUseCase {
             const newProfessor = await this.professorCreateService.execute(
                 professor,
             );
-            return newProfessor.toObject();
+            delete newProfessor.password;
+            return newProfessor;
         } catch (error) {
             if (error instanceof UserException) {
                 error.manageException();
